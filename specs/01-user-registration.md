@@ -1,6 +1,6 @@
 # Spec: User registration page
 
-**Status:** Draft — awaiting user approval before any application code.
+**Status:** Approved
 
 ## Purpose
 
