@@ -17,3 +17,14 @@ This is a class assignment about structured AI-assisted development. The process
 
 - Before implementing any feature, check it against `docs/project-brief.md` and `/specs`. If it is out of scope, tell the user instead of building it.
 - Work in small steps, one task at a time. After each task, stop with a short summary of what changed.
+## Implementation phase
+- Specs in /specs are approved and are the source of truth. Do not
+  contradict them. If code and spec disagree, stop and tell me; do
+  not silently change either.
+- Work on one task from docs/tasks.md at a time. Stop after each
+  task with a short summary and the exact commands to run the tests.
+- Write the tests listed in the relevant spec together with the code
+  (must-have cases first).
+- All Item.status and Trade.status changes go through
+  trades/services.py only.
+- CRITICAL: never run git commit or git push. I do git manually.
