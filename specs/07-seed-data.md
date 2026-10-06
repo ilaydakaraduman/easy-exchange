@@ -1,6 +1,6 @@
 # Spec: Seed data
 
-**Status:** Draft — awaiting user approval before any application code.
+**Status:** Approved
 
 ## Purpose
 
@@ -87,7 +87,7 @@
 
 12. Seed ensures one `Item` per demo user per MVP category: six items. It creates an item for a `(owner, category)` pair only when that user currently owns **zero** items in that category. If the user already owns one or more, seed skips that pair (no insert, no update).
 13. On create, seed sets these fields directly on the model (not through `POST /listings/new` and not through the listing form): `owner`, `category`, `title`, `description`, `metadata`. `status` is `AVAILABLE` (the model default; seed may set it on the new row only). `created_at` is set by the model. Seed does not set any field the `Item` model does not have.
-14. `title` and `description` (proposed; see Open questions):
+14. `title` and `description`:
 
     | Owner | Category | `title` | `description` |
     | --- | --- | --- | --- |
@@ -98,7 +98,7 @@
     | Ben | `lego` | Ben Lego Demo | Demo Lego listing for Ben. |
     | Ben | `tcg` | Ben TCG Demo | Demo TCG listing for Ben. |
 
-15. `metadata` uses only keys declared for that category. Before each item is saved, seed calls `validate_metadata(category, metadata)` and saves only if it returns without error. Proposed objects:
+15. `metadata` uses only keys declared for that category. Before each item is saved, seed calls `validate_metadata(category, metadata)` and saves only if it returns without error. The objects:
 
     | Owner | Category | `metadata` |
     | --- | --- | --- |
@@ -188,12 +188,12 @@ Tests live in `catalog/tests/` and call `call_command("seed")` against the test 
 
 ## Open questions
 
-Proposed answers are already written into the requirements above so the spec is reviewable. None of these is settled by `docs/plan.md`.
+All decided; recorded here for traceability. None of these was settled by `docs/plan.md`.
 
-1. **Demo credentials.** Proposed: `ada@example.com` / `Ada` / `ExchangeDemo1!` and `ben@example.com` / `Ben` / `ExchangeDemo2!`. Confirm or replace the emails, display names, and passwords.
-2. **Listing text and metadata.** Proposed titles, descriptions, and the six metadata objects in requirements 14–15, including omitting `grading` on Ben's TCG item and using `PSA 10` on Ada's. Confirm or replace.
-3. **Which items are liked.** Proposed: Ada's funko item and Ben's funko item, `like_item(Ada, Ben's funko)` then `like_item(Ben, Ada's funko)`. The plan only says "one of" each user's listings. Confirm this pair, or name a different pair.
-4. **Success line.** Proposed stdout is exactly `Seed complete: 3 categories, 2 users, 6 items, 1 match, 0 trades.` with no emails and no passwords. Confirm the wording, and confirm passwords stay off stdout.
-5. **Re-run does not repair drift.** Proposed: an existing category, user, or filled `(owner, category)` item slot is left unchanged, so a second seed does not reset `metadata_schema`, a password, a title, or an `Item.status`. The alternative is to overwrite those rows back to the constants in this spec. Confirm leave-unchanged.
-6. **Item identity is `(owner, category)`, not title.** Proposed so a renamed seed item is not duplicated on re-run. Confirm, or key the item on `(owner, category, title)` instead.
-7. **One transaction.** Proposed: the command body is a single `transaction.atomic()` so a validator failure commits nothing. Confirm, or allow partial inserts that a later run fills in.
+1. **Demo credentials.** Decided: `ada@example.com` / `Ada` / `ExchangeDemo1!` and `ben@example.com` / `Ben` / `ExchangeDemo2!`.
+2. **Listing text and metadata.** Decided: the titles, descriptions, and six metadata objects in requirements 14–15, including omitting `grading` on Ben's TCG item and using `PSA 10` on Ada's.
+3. **Which items are liked.** Decided: Ada's funko item and Ben's funko item, `like_item(Ada, Ben's funko)` then `like_item(Ben, Ada's funko)`.
+4. **Success line.** Decided: stdout is exactly `Seed complete: 3 categories, 2 users, 6 items, 1 match, 0 trades.` Passwords stay off stdout.
+5. **Re-run does not repair drift.** Decided: an existing category, user, or filled `(owner, category)` item slot is left unchanged.
+6. **Item identity is `(owner, category)`, not title.** Decided: a renamed seed item is not duplicated on re-run.
+7. **One transaction.** Decided: the command body is a single `transaction.atomic()` so a validator failure commits nothing.
