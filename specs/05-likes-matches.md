@@ -221,7 +221,7 @@ Tests live in `trades/tests/`. Cases 1–13 call `like_item` directly (the servi
 35. **Dead / inert pairs still listed**: set X to `IN_TRADE` and in a second run to `TRADED`. Assert the pair row is present and the badge text equals the status.
 36. **Reserved blocks**: assert the rendered page contains the `matches_trades` block region after the list and a `match_actions` region in each row (presence only; content is 06-trades').
 37. **POST refused**: `POST /matches` → `405`.
-38. **Query count**: with six matches, rendering `/matches` performs a bounded number of queries (no per-row item / owner / category query), asserted with `assertNumQueries` using the number the implementation settles on.
+38. **Query count**: with six matches, rendering `/matches` performs a bounded number of queries (no per-row item / owner / category query), asserted with `assertNumQueries` using the number the implementation settles on. Once `06-trades.md` is implemented, the page also renders three trade sections, adding exactly three queries to the count asserted here.
 
 **Navigation**
 
