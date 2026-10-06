@@ -6,6 +6,9 @@
 - Original long idea doc reduced to a short project brief (docs/project-brief.md)".
 ## Step 2: Planning (prompts, questions, decisions)
 ## Step 3: Specs
+- `docs/project-brief.md` written from Step 1 (MVP Pop Culture & Geek; stretch sports; out of scope Neo4j, broker, mobile). Original brief file was not on disk.
+- `specs/01-user-registration.md` drafted (display name, email, password, confirm password; no OAuth; no auto-login). Awaiting explicit approval before any application code.
+- User asked to build the registration page; implementation blocked until this spec is approved.
 ## Step 4: Skills used
 ## Step 5: Implementation (per task)
 ## Problems & how I fixed them
