@@ -24,7 +24,7 @@ For the live demo the users are the two seeded accounts from `docs/plan.md` sect
 
 ## MVP scope
 
-One vertical, **Pop Culture & Geek**, with exactly three `Category` rows (`slug` values `funko`, `lego`, `tcg`). Each category has fixed metadata fields defined in `Category.metadata_schema` (entries use the keys `key`, `label`, `type`, `required`):
+One vertical, **Pop Culture & Geek**, with exactly three `Category` rows (`slug` values `funko`, `lego`, `tcg`). Each category has fixed metadata fields defined in `Category.metadata_schema` (entries use the keys `key`, `label`, `type`, `required`, plus optional `min`, `max`, `choices`):
 
 | Category (`slug`) | Key | Type | Required | Rule |
 | --- | --- | --- | --- | --- |
@@ -114,7 +114,7 @@ Names are exactly those used in `docs/plan.md` and must be used unchanged in eve
 
 - **User** — an account with a case-insensitively unique email, a display name, and a password hash.
 - **Category** — one of the three MVP collectible types, identified by `slug` (`funko`, `lego`, `tcg`), with a `name` and a `metadata_schema`.
-- **`metadata_schema`** — JSON list on `Category` describing the allowed metadata fields; each entry has `key`, `label`, `type`, `required`.
+- **`metadata_schema`** — JSON list on `Category` describing the allowed metadata fields; each entry has `key`, `label`, `type`, `required`, plus optional `min`, `max`, `choices`.
 - **Item** (also "listing") — a collectible a `User` owns and offers for trade: `owner`, `category`, `title`, `description`, `status`, `metadata`, `created_at`.
 - **`metadata`** — JSON object on `Item` whose keys match the item's category `metadata_schema`.
 - **Item status** — `AVAILABLE` (can be liked and traded) | `IN_TRADE` (locked by a `PROPOSED` trade) | `TRADED` (terminal; swapped away).
