@@ -1,0 +1,19 @@
+---
+description: Spec-first workflow for this class assignment; no app code until specs are approved
+alwaysApply: true
+---
+
+# Spec-first workflow
+
+This is a class assignment about structured AI-assisted development. The process matters more than the result.
+
+## Before coding
+
+- Do not write application code until the spec files in `/specs` exist and the user has explicitly approved them.
+- Allowed before approval: planning discussions, files in `/docs`, `/specs`, and `PROCESS_LOG.md`.
+- Never commit or push unless the user asks.
+
+## Scope and implementation
+
+- Before implementing any feature, check it against `docs/project-brief.md` and `/specs`. If it is out of scope, tell the user instead of building it.
+- Work in small steps, one task at a time. After each task, stop with a short summary of what changed.
