@@ -3,6 +3,7 @@
 - Decision: MVP = Pop Culture & Geek (Funko, Lego, TCG)
 - Stretch: sports category
 - Out of scope: Neo4j, message broker, mobile app
+- Original long idea doc reduced to a short project brief (docs/project-brief.md)".
 ## Step 2: Planning (prompts, questions, decisions)
 ## Step 3: Specs
 ## Step 4: Skills used
