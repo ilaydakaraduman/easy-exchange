@@ -20,7 +20,7 @@ Confirm the requested feature is in scope per `docs/plan.md` and `docs/project-b
 
 ## Step 2: Write the spec
 
-Create or revise only the one file the user asked for, under `/specs`. Follow the existing naming pattern (`NN-feature-name.md`, zero-padded, next free number).
+Create or revise only the one file the user asked for, under `/specs`. If the user names an explicit file (for example `specs/00-overview.md` or `specs/00-architecture.md`), use that exact filename. Otherwise follow the existing naming pattern (`NN-feature-name.md`, zero-padded, next free number).
 
 Start the file with a `# Spec: <feature name>` heading and a `**Status:** Draft — awaiting user approval before any application code.` line, then use these sections in this order, every time:
 
@@ -34,6 +34,33 @@ Start the file with a `# Spec: <feature name>` heading and a `**Status:** Draft 
 ## Test cases
 ## Open questions
 ```
+
+**Exception — the two general documents.** For these files, replace the section list above with the one below. Everything else in this skill still applies (read context first, use the plan's names exactly, hard limits, assumptions to confirm).
+
+- `specs/00-overview.md`:
+
+  ```markdown
+  ## Purpose
+  ## Target users
+  ## MVP scope
+  ## Core flows
+  ## Out of scope
+  ## Glossary
+  ## Open questions
+  ```
+
+- `specs/00-architecture.md`:
+
+  ```markdown
+  ## Stack decision
+  ## Data model
+  ## Category metadata schemas
+  ## State machine
+  ## Double-booking prevention
+  ## Seed data
+  ## Testing approach
+  ## Open questions
+  ```
 
 Section guidance:
 
