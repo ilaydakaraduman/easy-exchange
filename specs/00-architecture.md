@@ -380,4 +380,4 @@ Transaction handling in tests: `TestCase` wraps each test in a transaction, and 
 
 ## Open questions
 
-1. **`metadata_schema` entry format extension needs a one-line update to `specs/00-overview.md` and `docs/plan.md`.** Both documents currently say entries use the keys `key`, `label`, `type`, `required`. This spec adds optional `min`, `max`, `choices` (see *Category metadata schemas*). The overview's MVP scope paragraph and glossary entry for `metadata_schema`, and plan section 2's `Category` bullet, should each gain "plus optional `min`, `max`, `choices`". Not applied here; this spec touches only itself.
+1. **Resolved.** `docs/plan.md` and `specs/00-overview.md` now describe the optional `min`, `max`, `choices`.

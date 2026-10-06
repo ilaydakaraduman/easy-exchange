@@ -24,6 +24,10 @@ Class assignment (07-ITAI5050). Specs in `/specs` stay the source of truth. Exis
 - SQLite `JSONField` for MVP; PostgreSQL JSONB / `SELECT FOR UPDATE` is a documented upgrade path, not a requirement.
 - - Extended `metadata_schema` entries with optional `min`, `max` (int) and `choices` (str). Reason: the brief's goal is that adding a category needs only a new schema definition, so range and choice rules (for example `box_condition` 1-10, `card_condition` values) must live in the schema instead of being hard-coded in the validator. Invalid combinations (min/max on a str field, choices on an int field) raise a configuration error when the schema is loaded. Decided during the architecture spec review; details in `specs/00-architecture.md`.
 
+- Likes are append-only (cut #2 from section 7 is taken): no unlike, no match removal. Decided in specs/05-likes-matches.md.
+
+- New likes are allowed on `IN_TRADE` items and refused on `TRADED` items; a duplicate like is idempotent. `IN_TRADE` is reversible (reject or cancel returns the item to `AVAILABLE`); `TRADED` is terminal.
+
 ---
 
 ## 1. Tech stack options
@@ -65,7 +69,7 @@ erDiagram
 ```
 
 - **User**: email (unique, case-insensitive), display name, password hash. Django’s `AbstractUser` or a thin profile on `auth.User`. No OAuth, no email verify (already out of the registration spec).
-- **Category**: `slug` (`funko`, `lego`, `tcg`), `name`, `metadata_schema` (JSON: list of fields with `key`, `label`, `type`, `required`). Stretch sports stays out of DB seed.
+- **Category**: `slug` (`funko`, `lego`, `tcg`), `name`, `metadata_schema` (JSON: list of fields with `key`, `label`, `type`, `required`, plus optional `min`, `max` (int fields) and `choices` (str fields)). Stretch sports stays out of DB seed.
 - **Item** (listing): `owner`, `category`, `title`, `description`, `status` (`AVAILABLE` | `IN_TRADE` | `TRADED`), `metadata` (JSON object matching that category’s schema), `created_at`. No image upload in MVP.
 - **Like**: `(user, item)` unique. Reject likes on own items. Public visitors cannot like.
 - **Match**: pair of items `(item_a, item_b)` with `item_a_id < item_b_id` uniqueness. Created when a like completes a **reciprocal pair**: owner of X liked Y **and** owner of Y liked X.
@@ -116,7 +120,7 @@ Do **not** read status, then update in a second step. Inside `transaction.atomic
 2. If the **affected row count is not 2**, roll back the whole transaction and refuse the propose (one or both items were already locked or traded).
 3. Only if count == 2, insert the `Trade` row as `PROPOSED` and commit.
 
-Likes on locked/traded items may remain for history but **cannot** start a new trade. Other matches involving a locked item are inert until cancel returns `AVAILABLE`, or are dead if the item is `TRADED`. An item may have at most one trade in `PROPOSED`.
+Likes on locked/traded items may remain for history but **cannot** start a new trade. New likes are allowed on `IN_TRADE` items and refused on `TRADED` items; a duplicate like is idempotent. Other matches involving a locked item are inert until cancel returns `AVAILABLE`, or are dead if the item is `TRADED`. An item may have at most one trade in `PROPOSED`.
 
 **PostgreSQL later:** the same `UPDATE ... WHERE status='AVAILABLE'` plus row count still works and is the portable pattern. The usual PG tightening is to `SELECT ... FOR UPDATE` both item rows (ordered by id to avoid deadlocks) inside the transaction, then update. SQLite does not give the same row-level lock semantics, which is why the conditional update + row count is the MVP mechanism.
 
@@ -182,8 +186,8 @@ Work **one spec/task at a time**. After each task, stop. Specs first; you approv
 
 **Phase 3 — Likes and matches**
 
-- Like/unlike button on listing detail (auth required)
-- Match created/removed when reciprocal likes appear/disappear
+- Like button on listing detail (auth required). Likes are append-only: there is no unlike.
+- Match created when reciprocal likes appear. A Match is never removed.
 - Simple “Matches” page: pairs you can propose a trade on (seed pair visible immediately)
 
 **Phase 4 — Trades (core state machine)**
