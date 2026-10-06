@@ -1,6 +1,6 @@
 # Spec: Product overview
 
-**Status:** Draft — awaiting user approval before any application code.
+**Status:** Approved
 
 ## Purpose
 
