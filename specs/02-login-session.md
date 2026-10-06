@@ -64,7 +64,7 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
    | Create listing, edit listing | `03-listings.md` |
    | Like action | `05-likes-matches.md` |
    | Matches page | `05-likes-matches.md` |
-   | Propose, accept, reject, cancel trade | `06-trades.md` |
+   | Propose, accept, reject, cancel trade: `POST /matches/<id>/propose`, `POST /trades/<id>/accept`, `POST /trades/<id>/reject`, `POST /trades/<id>/cancel`. Anonymous `POST` redirects to exactly `/login` with no `next` parameter; any non-`POST` method returns `405`. | `06-trades.md` |
 
    Public (never redirect): `/`, browse and category filter, listing detail (read-only, status badges visible), `/register`, `/login`.
 19. When an anonymous visitor requests a protected **page** (`GET`), the server responds with a redirect to `/login?next=<requested path>` and does not render the page. Implemented with Django's `login_required` and `LOGIN_URL = "/login"` (so the setting name and the route agree; `redirect_field_name` stays the default `next`).
