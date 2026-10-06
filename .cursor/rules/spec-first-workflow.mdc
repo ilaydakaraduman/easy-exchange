@@ -1,30 +1,33 @@
 ---
-description: Spec-first workflow for this class assignment; no app code until specs are approved
+description: Spec-first workflow for this class assignment; specs are approved, implement from docs/tasks.md
 alwaysApply: true
 ---
 
 # Spec-first workflow
 
-This is a class assignment about structured AI-assisted development. The process matters more than the result.
+This is a class assignment about structured AI-assisted development.
+The process matters more than the result.
 
-## Before coding
+## Source of truth
 
-- Do not write application code until the spec files in `/specs` exist and the user has explicitly approved them.
-- Allowed before approval: planning discussions, files in `/docs`, `/specs`, and `PROCESS_LOG.md`.
-- Never commit or push unless the user asks.
+- All specs in `/specs` are approved. They, together with
+  `docs/plan.md` and `docs/tasks.md`, are the source of truth.
+- Before implementing anything, check it against
+  `docs/project-brief.md` and `/specs`. If it is out of scope, tell
+  the user instead of building it.
+- If code and spec disagree or the specs conflict, choose the
+  smallest option consistent with the specs, continue, and report
+  it under "Deviations and assumptions". Do not edit `/specs`,
+  `/docs`, `PROCESS_LOG.md` or `.cursor` unless asked.
 
-## Scope and implementation
+## Implementation
 
-- Before implementing any feature, check it against `docs/project-brief.md` and `/specs`. If it is out of scope, tell the user instead of building it.
-- Work in small steps, one task at a time. After each task, stop with a short summary of what changed.
-## Implementation phase
-- Specs in /specs are approved and are the source of truth. Do not
-  contradict them. If code and spec disagree, stop and tell me; do
-  not silently change either.
-- Work on one task from docs/tasks.md at a time. Stop after each
-  task with a short summary and the exact commands to run the tests.
-- Write the tests listed in the relevant spec together with the code
-  (must-have cases first).
-- All Item.status and Trade.status changes go through
-  trades/services.py only.
-- CRITICAL: never run git commit or git push. I do git manually.
+- Work task by task in the order of `docs/tasks.md`, for the range
+  of tasks the user names. Stop only when a check fails that you
+  cannot fix, when specs conflict in a way you cannot resolve, or
+  when the requested range is done. End with a short summary.
+- Write test files only when the user asks for them in the prompt.
+- All `Item.status` and `Trade.status` changes go through
+  `trades/services.py` only.
+- CRITICAL: never run `git commit` or `git push`. The user does git
+  manually.
