@@ -22,6 +22,7 @@ Class assignment (07-ITAI5050). Specs in `/specs` stay the source of truth. Exis
 - Pairwise listing likes (not “match the person, then pick items”) so a match is already a 1-for-1 pair.
 
 - SQLite `JSONField` for MVP; PostgreSQL JSONB / `SELECT FOR UPDATE` is a documented upgrade path, not a requirement.
+- - Extended `metadata_schema` entries with optional `min`, `max` (int) and `choices` (str). Reason: the brief's goal is that adding a category needs only a new schema definition, so range and choice rules (for example `box_condition` 1-10, `card_condition` values) must live in the schema instead of being hard-coded in the validator. Invalid combinations (min/max on a str field, choices on an int field) raise a configuration error when the schema is loaded. Decided during the architecture spec review; details in `specs/00-architecture.md`.
 
 ---
 
