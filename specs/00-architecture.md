@@ -170,7 +170,7 @@ Rules: an `Item` may be edited by its owner only while `status = AVAILABLE`; `IN
 | `user` | FK → `User` | The user expressing interest. |
 | `item` | FK → `Item` | The liked listing. |
 
-Constraints: unique `(user, item)`. Service rule: `user != item.owner` (no likes on own items). Likes are append-only; there is no unlike, so a `Match` is never removed. Likes on `IN_TRADE` or `TRADED` items are allowed and kept for history but cannot start a new trade (the propose lock refuses them).
+Constraints: unique `(user, item)`. Service rule: `user != item.owner` (no likes on own items). Likes are append-only; there is no unlike, so a `Match` is never removed. Service rule (status): new likes are accepted on `AVAILABLE` and `IN_TRADE` items and refused on `TRADED` items — `like_item` raises `LikeNotAllowed` with the message `This listing has already been traded.` and writes nothing; existing likes are kept for history in any status but only `AVAILABLE` items can enter a trade (the propose lock refuses the rest). Defined in `05-likes-matches.md`.
 
 ### `Match` (app `trades`)
 
@@ -278,7 +278,7 @@ stateDiagram-v2
 | `IN_TRADE` | `AVAILABLE` | Cancel the `PROPOSED` trade | Proposer only; both items move together |
 | `TRADED` | — | None | Terminal; no transition out |
 
-Side rules: an `Item` may be edited only in `AVAILABLE`. Likes are accepted in any status but only `AVAILABLE` items can enter a trade. Status badges are public on browse and detail pages.
+Side rules: an `Item` may be edited only in `AVAILABLE`. New likes are accepted on `AVAILABLE` and `IN_TRADE` items and refused on `TRADED` items (`This listing has already been traded.`); existing likes are kept for history in any status but only `AVAILABLE` items can enter a trade. Status badges are public on browse and detail pages.
 
 ### Trade status
 
@@ -358,8 +358,12 @@ Tests use Django's test runner (`python manage.py test`) on SQLite and focus on 
 
 **Likes and matches (`trades`)**
 
-11. A like on the user's own item is refused. A duplicate `(user, item)` like is refused.
+11. A like on the user's own item is refused. A duplicate `(user, item)` like is idempotent: no error, no second row.
 12. A single like creates no `Match`; the reciprocal like creates exactly one `Match` with `item_a_id < item_b_id`; a repeated reciprocal pair does not create a second `Match`.
+
+12a. A like on an `IN_TRADE` item is allowed: the `Like` row is created exactly as for an `AVAILABLE` item, and if it completes a reciprocal pair the `Match` is created.
+
+12b. A like on a `TRADED` item is refused: `like_item` raises `LikeNotAllowed` with the message `This listing has already been traded.`; no `Like` and no `Match` is created, even if the pair would otherwise be reciprocal.
 
 **Metadata validation (`catalog`)**
 
