@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load catalog_extras %}
+{% block title %}{{ item.title }}{% endblock %}
+{% block content %}
+<h1>{{ item.title }}</h1>
+{% include "catalog/_status_badge.html" %}
+<p>{{ item.category.name }}</p>
+<p>{{ item.owner.display_name }}</p>
+<p>Listed on {{ item.created_at|date }}</p>
+{{ item.description|linebreaks }}
+<section>
+  <h2>Details</h2>
+  <dl class="details">
+    {% for entry in item.category.metadata_schema %}
+      <dt>{{ entry.label }}</dt>
+      <dd>
+        {% if item.metadata|has_key:entry.key %}
+          {% if entry.type == "bool" %}
+            {% if item.metadata|dict_get:entry.key %}Yes{% else %}No{% endif %}
+          {% else %}
+            {{ item.metadata|dict_get:entry.key }}
+          {% endif %}
+        {% else %}
+          —
+        {% endif %}
+      </dd>
+    {% endfor %}
+  </dl>
+</section>
+{% if user.is_authenticated and user.id == item.owner_id and item.status == "AVAILABLE" %}
+  <p><a href="/listings/{{ item.id }}/edit">Edit</a></p>
+{% endif %}
+{% if user.is_authenticated %}
+  <div class="listing-actions">
+    {% block listing_actions %}{% endblock %}
+  </div>
+{% else %}
+  <p><a href="/login?next=/listings/{{ item.id }}">Sign in to like or trade</a></p>
+{% endif %}
+{% endblock %}

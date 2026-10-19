@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Edit listing{% endblock %}
+{% block content %}
+<h1>Edit listing</h1>
+<p>{{ category_name }}</p>
+<form method="post" action="/listings/{{ item.id }}/edit" novalidate>
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Save</button>
+</form>
+{% endblock %}
