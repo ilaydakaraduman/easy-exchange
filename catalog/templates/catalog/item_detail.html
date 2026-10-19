@@ -32,7 +32,9 @@
 {% endif %}
 {% if user.is_authenticated %}
   <div class="listing-actions">
-    {% block listing_actions %}{% endblock %}
+    {% block listing_actions %}
+      {% include "trades/_like_control.html" %}
+    {% endblock %}
   </div>
 {% else %}
   <p><a href="/login?next=/listings/{{ item.id }}">Sign in to like or trade</a></p>

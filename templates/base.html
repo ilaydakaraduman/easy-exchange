@@ -12,6 +12,7 @@
     <nav>
       {% if user.is_authenticated %}
         <a href="/listings/new">New listing</a>
+        <a href="/matches">Matches</a>
         <span>{{ user.display_name }}</span>
         <form method="post" action="/logout">
           {% csrf_token %}
