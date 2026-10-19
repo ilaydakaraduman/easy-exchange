@@ -8,9 +8,10 @@
 </head>
 <body>
   <header>
-    <span class="brand">Easy Exchange</span>
+    <a class="brand" href="/">Easy Exchange</a>
     <nav>
       {% if user.is_authenticated %}
+        <a href="/listings/new">New listing</a>
         <span>{{ user.display_name }}</span>
         <form method="post" action="/logout">
           {% csrf_token %}

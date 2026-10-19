@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}New listing{% endblock %}
+{% block content %}
+<h1>New listing</h1>
+<form class="category-switch" method="get" action="/listings/new">
+  <p>
+    <label for="id_category_select">Category</label>
+    <select id="id_category_select" name="category">
+      {% for category in categories %}
+        <option value="{{ category.slug }}"{% if selected_category and selected_category.slug == category.slug %} selected{% endif %}>{{ category.name }}</option>
+      {% endfor %}
+    </select>
+  </p>
+  <button type="submit">Continue</button>
+</form>
+{% if form %}
+  <p>{{ selected_category.name }}</p>
+  <form method="post" action="/listings/new" novalidate>
+    {% csrf_token %}
+    <input type="hidden" name="category" value="{{ selected_category.slug }}">
+    {{ form.as_p }}
+    <button type="submit">Create listing</button>
+  </form>
+{% endif %}
+{% endblock %}
