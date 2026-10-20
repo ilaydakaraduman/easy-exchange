@@ -45,7 +45,7 @@ body {
   min-height: 100vh;
   max-width: 100%;
   font-family: var(--font);
-  font-size: 1rem;
+  font-size: 16px;
   line-height: 1.55;
   color: var(--ink);
   background: var(--bg);
@@ -176,7 +176,7 @@ main {
   gap: 0.5rem;
   max-width: 100%;
   margin: 0 0 1.25rem;
-  padding-bottom: 0.2rem;
+  padding-bottom: 0.85rem;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
@@ -763,7 +763,7 @@ form[action="/register"] + p {
   }
 
   .listings {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .match-row,
@@ -791,6 +791,12 @@ form[action="/register"] + p {
     margin-left: 0;
   }
 
+  .trade-row > .badge,
+  .trade-row > .trade-status {
+    justify-self: start;
+    width: auto;
+  }
+
   .category-switch,
   form[action="/login"],
   form[action="/register"],
@@ -813,10 +819,18 @@ form[action="/register"] + p {
   }
 
   .listing-actions > a,
-  .listing-actions > span {
+  .listing-actions > span,
+  a[href$="/edit"] {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+  }
+
+  button,
+  input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    font-size: 16px;
   }
 
   form p:has(> input[type="checkbox"]) {
