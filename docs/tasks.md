@@ -7,7 +7,7 @@ Ordered, one-session tasks for plan section 6 of [plan.md](plan.md): Phase 1 ske
 - One task per agent session. Stop when its "done when" check passes, then start the next.
 - Every task runs the full suite too: `python manage.py test` must stay green after each task.
 - Tests the specs mark as nice-to-have are not part of any task. They are listed under *If time runs short*.
-- Spec status: `00`–`08` are **Approved**.
+- Spec status: `00`–`09` are **Approved**.
 - Never commit or push unless asked.
 
 **One ordering change versus the plan.** Plan Phase 2 includes the seed command, but seed must create its reciprocal pair by calling `like_item` ([07-seed-data](../specs/07-seed-data.md) requirements 17–19). The `like_item` service (task 8) therefore comes right before seed (task 9). The like button and the Matches page stay after seed.
@@ -260,6 +260,60 @@ Approved change request: [08-visual-design-and-photos](../specs/08-visual-design
 - **Creates:** no new files. Updates `static/css/base.css` and adds the case 10 test to `catalog/tests/test_responsive.py`.
 - **Must-have tests** — visual spec case 10, plus the existing breakpoint test, which must still reject `url(http` and `url(https`.
 - **Done when:** `python manage.py check`, `makemigrations`, `migrate`, and `python manage.py test` are green. `trades/services.py` is untouched.
+
+---
+
+## Phase 7 — Visual polish
+
+Approved change request: [09-visual-polish](../specs/09-visual-polish.md). After each task: `python manage.py check` and `python manage.py test`. Do not change `trades/services.py`, models, migrations, views, or like, match, trade, authentication, or permission behavior. Do not edit an existing test. Spec 09 supersedes no current assertion. Must-have tests are added after task 28.
+
+### Task 23 — Matches and trade thumbnails
+
+- **Goal:** Each match row shows both items as small cards with a thumbnail (photo or the category illustration), the existing labels and links, and an inline swap arrow between them. Incoming, outgoing, and finished trade rows show the same thumbnails before each title link, with no arrow. Existing texts, form actions, and element order stay.
+- **Specs:** [09-visual-polish](../specs/09-visual-polish.md) requirements 4–8. Supersedes the plain match-row layout in spec 05 and the "no images on Matches or trade rows" lines in spec 08-visual-design-and-photos.
+- **Creates:** no new files. Updates `trades/templates/trades/matches.html`, `trades/templates/trades/_trade_sections.html`, and `static/css/base.css` (pair layout, thumbnail size, `nth-child` rules replaced so the arrow and thumbnails do not take those styles).
+- **Must-have tests** — spec 09 cases 5–7, written after task 28 in `trades/tests/test_visual_polish.py`.
+- **Done when:** `python manage.py check` is clean and `python manage.py test` is green. A match row still contains `Your item`, `Their item`, both title links, and both badges.
+
+### Task 24 — Home intro strip
+
+- **Goal:** `GET /` starts with a hero: heading `Swap collectibles, not cash`, the decided sentence, `hero.svg`, and three steps. Anonymous visitors get `Register` then `Sign in`. Logged-in visitors get `New listing`. No form and no trade-route link inside the hero.
+- **Specs:** [09-visual-polish](../specs/09-visual-polish.md) requirements 9–11. Supersedes the home page starting at the category chips.
+- **Creates:** `static/img/hero.svg`, `static/img/steps/list.svg`, `static/img/steps/match.svg`, `static/img/steps/swap.svg`. Updates `catalog/templates/catalog/browse.html` and `static/css/base.css`.
+- **Must-have tests** — spec 09 cases 1–3, written after task 28 in `catalog/tests/test_visual_polish.py`.
+- **Done when:** `python manage.py check` is clean and `python manage.py test` is green. An anonymous `/` still has no `New listing` link. A logged-in `/` still has no `Sign in` or `Register` link.
+
+### Task 25 — Detail page, two columns
+
+- **Goal:** The detail page puts the existing photo in a left column and the existing title, badge, facts, Details, and action area in a right column, in today's order. The columns stack below 640px.
+- **Specs:** [09-visual-polish](../specs/09-visual-polish.md) requirements 12–13. Supersedes the single-column detail order in specs 04 and 08-visual-design-and-photos.
+- **Creates:** no new files. Updates `catalog/templates/catalog/item_detail.html` and `static/css/base.css`.
+- **Must-have tests** — spec 09 cases 8–9, written after task 28.
+- **Done when:** `python manage.py check` is clean and `python manage.py test` is green. Detail still shows `Listed on`, `Details`, and the same action texts.
+
+### Task 26 — Category chip icons
+
+- **Goal:** Funko, Lego, and TCG chips are each preceded by a sibling SVG icon (figure, brick, card). `All` and the game chips are unchanged. Anchor text and hrefs stay exact.
+- **Specs:** [09-visual-polish](../specs/09-visual-polish.md) requirement 14.
+- **Creates:** `static/img/icons/figure.svg`, `static/img/icons/brick.svg`, `static/img/icons/card.svg`. Updates `catalog/templates/catalog/browse.html` and `static/css/base.css`.
+- **Must-have tests** — spec 09 case 4, written after task 28.
+- **Done when:** `python manage.py check` is clean and `python manage.py test` is green. Filter link text is still `All` plus the three category names.
+
+### Task 27 — Empty states
+
+- **Goal:** `empty.svg` sits immediately before each existing empty paragraph on browse and on the Matches page (pair list and the three trade sections). The sentences stay exact. The image is absent when that list has rows.
+- **Specs:** [09-visual-polish](../specs/09-visual-polish.md) requirement 15.
+- **Creates:** `static/img/empty.svg`. Updates `catalog/templates/catalog/browse.html`, `trades/templates/trades/matches.html`, `trades/templates/trades/_trade_sections.html`, and `static/css/base.css`.
+- **Must-have tests** — spec 09 cases 10–11, written after task 28.
+- **Done when:** `python manage.py check` is clean and `python manage.py test` is green. Empty browse still says `No listings yet.` and a search miss still says `No listings match your search.`
+
+### Task 28 — Footer, favicon, motion
+
+- **Goal:** Base layout gains the footer `Easy Exchange, class project` and one favicon link to `favicon.svg`. Buttons use the same hover lift as cards. `prefers-reduced-motion` disables that lift. Existing focus-visible outlines stay.
+- **Specs:** [09-visual-polish](../specs/09-visual-polish.md) requirements 16–19.
+- **Creates:** `static/img/favicon.svg`. Updates `templates/base.html` and `static/css/base.css`.
+- **Must-have tests** — spec 09 cases 12–14, written after task 28. Cases 1–11 are written in the same pass.
+- **Done when:** `python manage.py check` is clean and `python manage.py test` is green. `trades/services.py` is untouched. The four files under `static/img/placeholders/` are untouched.
 
 ---
 

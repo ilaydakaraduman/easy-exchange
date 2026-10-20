@@ -2,7 +2,11 @@
 {% load catalog_extras %}
 {% block title %}{{ item.title }}{% endblock %}
 {% block content %}
+<div class="detail-layout">
+<div class="detail-media">
 {% include "catalog/_listing_photo.html" %}
+</div>
+<div class="detail-main">
 <h1>{{ item.title }}</h1>
 {% include "catalog/_status_badge.html" %}
 <p>{{ item.category.name }}</p>
@@ -40,4 +44,6 @@
 {% else %}
   <p><a href="/login?next=/listings/{{ item.id }}">Sign in to like or trade</a></p>
 {% endif %}
+</div>
+</div>
 {% endblock %}

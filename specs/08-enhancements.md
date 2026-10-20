@@ -128,7 +128,7 @@ Where this spec and specs 00–07 disagree on the statements listed under *State
 
 ### Page order on `GET /`
 
-31. The browse body order is: category `nav.filters`, then `nav.game-filters` only when category is `tcg`, then `form.search-form`, then `ul.listings` or the empty `<p>`.
+31. The browse body order is: category `nav.filters`, then `nav.game-filters` only when category is `tcg`, then `form.search-form`, then `ul.listings` or the empty `<p>`. Superseded by specs/09-visual-polish.md.
 
 ### What this spec does not change
 

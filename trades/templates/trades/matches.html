@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Matches{% endblock %}
 {% block content %}
 <h1>Matches</h1>
@@ -6,19 +7,24 @@
   <ul class="matches">
     {% for pair in pairs %}
       <li class="match-row">
-        <div>
+        <div class="pair-side">
+          {% include "catalog/_listing_photo.html" with item=pair.your_item %}
           <div>Your item</div>
           <a href="/listings/{{ pair.your_item.id }}">{{ pair.your_item.title }}</a>
           <div>{{ pair.your_item.category.name }}</div>
           {% include "catalog/_status_badge.html" with item=pair.your_item %}
         </div>
-        <div>
+        <svg class="swap-arrow" aria-hidden="true" viewBox="0 0 24 24">
+          <path fill="none" stroke="#0f6e6b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 12h16M8 8l-4 4 4 4M16 8l4 4-4 4"/>
+        </svg>
+        <div class="pair-side">
+          {% include "catalog/_listing_photo.html" with item=pair.their_item %}
           <div>Their item</div>
           <a href="/listings/{{ pair.their_item.id }}">{{ pair.their_item.title }}</a>
           <div>{{ pair.their_item.category.name }}</div>
           {% include "catalog/_status_badge.html" with item=pair.their_item %}
         </div>
-        <div>Other owner {{ pair.other_owner_name }}</div>
+        <div class="pair-owner">Other owner {{ pair.other_owner_name }}</div>
         <div class="match_actions">
           {% block match_actions %}
             {% include "trades/_match_actions.html" %}
@@ -28,6 +34,7 @@
     {% endfor %}
   </ul>
 {% else %}
+  <img class="empty-art" alt="" src="{% static 'img/empty.svg' %}">
   <p>No matches yet. Like other collectors' listings — when they like one of yours back, the pair appears here.</p>
   <p><a href="/">Browse listings</a></p>
 {% endif %}

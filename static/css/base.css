@@ -191,6 +191,13 @@ main {
   -webkit-overflow-scrolling: touch;
 }
 
+.chip-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  align-self: center;
+  flex: 0 0 auto;
+}
+
 .filters a,
 .game-filters a {
   display: inline-flex;
@@ -219,6 +226,105 @@ main {
   border-color: var(--accent);
   color: var(--on-accent);
   font-weight: 700;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(12rem, 0.85fr);
+  gap: 0.75rem 1.5rem;
+  align-items: center;
+  margin: 0 0 1.5rem;
+  padding: 1.25rem 1.35rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.hero-copy {
+  min-width: 0;
+}
+
+.hero h1 {
+  margin-bottom: 0.45rem;
+}
+
+.hero-scene {
+  width: 100%;
+  height: auto;
+  border-radius: 0.7rem;
+  background: #f6f1e6;
+}
+
+.hero-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  grid-column: 1 / -1;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hero-steps li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.hero-steps img {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex: none;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0;
+}
+
+.hero-actions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.6rem;
+  padding: 0.45rem 0.95rem;
+  border-radius: 0.6rem;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.hero-actions a:hover {
+  background: var(--accent-strong);
+  color: var(--on-accent);
+}
+
+.detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.empty-art {
+  display: block;
+  width: 8rem;
+  height: auto;
+  margin: 0 0 0.75rem;
+}
+
+.site-footer {
+  width: min(68rem, 100%);
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0.25rem var(--space) 1.5rem;
+  color: var(--muted);
+  font-size: 0.85rem;
 }
 
 /* Listing cards: catalog/browse.html ul.listings > li.listing-card */
@@ -440,14 +546,13 @@ a[href$="/edit"]:hover {
 
 .match-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   gap: 0.85rem 1rem;
-  align-items: stretch;
+  align-items: center;
   padding: 1rem;
 }
 
-.match-row > div:nth-child(1),
-.match-row > div:nth-child(2) {
+.pair-side {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -458,12 +563,18 @@ a[href$="/edit"]:hover {
   border-radius: 0.7rem;
 }
 
-.match-row > div > div:first-child {
+.pair-side > div:first-of-type {
   color: var(--muted);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+.swap-arrow {
+  width: 1.75rem;
+  height: 1.75rem;
+  justify-self: center;
 }
 
 .match-row > div > a,
@@ -480,12 +591,18 @@ a[href$="/edit"]:hover {
   text-decoration: underline;
 }
 
-.match-row > div > div:nth-child(3) {
+.pair-side > div:nth-of-type(2) {
   color: var(--muted);
   font-size: 0.9rem;
 }
 
-.match-row > div:nth-child(3) {
+.pair-side > .listing-photo,
+.trade-thumb > .listing-photo {
+  width: 4.5rem;
+  max-width: 4.5rem;
+}
+
+.pair-owner {
   grid-column: 1 / -1;
   color: var(--muted);
   font-size: 0.95rem;
@@ -515,7 +632,7 @@ a[href$="/edit"]:hover {
 
 .trade-row {
   display: grid;
-  grid-template-columns: minmax(8rem, 14rem) minmax(0, 1fr) auto;
+  grid-template-columns: 4.5rem minmax(0, 1fr) auto;
   gap: 0.45rem 0.85rem;
   align-items: center;
   padding: 1rem 1.1rem;
@@ -527,34 +644,42 @@ a[href$="/edit"]:hover {
   overflow-wrap: anywhere;
 }
 
-.trade-row > div:nth-child(1),
-.trade-row > div:nth-child(4) {
+.trade-label {
+  grid-column: 1 / -1;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
-.trade-row > :nth-child(10) {
-  grid-column: 1 / -1;
-  font-size: 0.85rem;
-}
-
-.trade-row > form:nth-child(11),
-.trade-row > form:nth-child(12) {
+.trade-thumb {
   grid-column: 1;
-  grid-row: 5;
-  margin-top: 0.35rem;
 }
 
-.trade-row > form:nth-child(12) {
-  margin-left: 7rem;
+.trade-row > a {
+  grid-column: 2;
+}
+
+.trade-row > .badge {
+  grid-column: 3;
+  justify-self: start;
+}
+
+.trade-row > div:not(.trade-label),
+.trade-row > .trade-status,
+.trade-row > form {
+  grid-column: 1 / -1;
+}
+
+.trade-row > form {
+  margin-top: 0.35rem;
 }
 
 /* Empty copy: browse p after .filters, matches empty p, trade section p */
 .filters + p,
 .search-form + p,
 .game-filters + p,
+.empty-art + p,
 main > h1 + p:has(+ p > a[href="/"]),
 .matches_trades section > p {
   max-width: none;
@@ -701,10 +826,12 @@ button {
   font-weight: 700;
   line-height: 1.2;
   cursor: pointer;
+  transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
 }
 
 button:hover {
   background: var(--accent-strong);
+  transform: translateY(-2px);
 }
 
 /* Primary: Propose and Accept. Secondary: Cancel. Danger: Reject. */
@@ -826,15 +953,23 @@ form[action="/register"] + p {
     grid-template-columns: minmax(0, 1fr);
   }
 
+  .hero,
+  .detail-layout,
   .match-row,
   .trade-row,
   .details {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .match-row > div:nth-child(3),
+  .pair-owner,
   .match_actions,
-  .trade-row > :nth-child(10) {
+  .trade-label,
+  .trade-thumb,
+  .trade-row > a,
+  .trade-row > .badge,
+  .trade-row > div,
+  .trade-row > .trade-status,
+  .trade-row > form {
     grid-column: auto;
   }
 
@@ -844,10 +979,8 @@ form[action="/register"] + p {
     width: 100%;
   }
 
-  .trade-row > form:nth-child(11),
-  .trade-row > form:nth-child(12) {
+  .trade-row > form {
     grid-row: auto;
-    grid-column: 1;
     margin-left: 0;
   }
 
@@ -918,13 +1051,15 @@ form[action="/register"] + p {
 @media (prefers-reduced-motion: reduce) {
   .listing-card,
   .match-row,
-  .trade-row {
+  .trade-row,
+  button {
     transition: none;
   }
 
   .listing-card:hover,
   .match-row:hover,
-  .trade-row:hover {
+  .trade-row:hover,
+  button:hover {
     transform: none;
   }
 }

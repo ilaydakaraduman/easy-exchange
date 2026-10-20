@@ -1,13 +1,16 @@
+{% load static %}
 <section>
   <h2>Incoming proposals</h2>
   {% if incoming %}
     <ul class="trade-list">
       {% for row in incoming %}
         <li class="trade-row">
-          <div>Your item</div>
+          <div class="trade-label">Your item</div>
+          <span class="trade-thumb">{% include "catalog/_listing_photo.html" with item=row.your_item %}</span>
           <a href="/listings/{{ row.your_item.id }}">{{ row.your_item.title }}</a>
           {% include "catalog/_status_badge.html" with item=row.your_item %}
-          <div>Their item</div>
+          <div class="trade-label">Their item</div>
+          <span class="trade-thumb">{% include "catalog/_listing_photo.html" with item=row.their_item %}</span>
           <a href="/listings/{{ row.their_item.id }}">{{ row.their_item.title }}</a>
           {% include "catalog/_status_badge.html" with item=row.their_item %}
           <div>Other party {{ row.other_name }}</div>
@@ -26,6 +29,7 @@
       {% endfor %}
     </ul>
   {% else %}
+    <img class="empty-art" alt="" src="{% static 'img/empty.svg' %}">
     <p>No incoming proposals.</p>
   {% endif %}
 </section>
@@ -35,10 +39,12 @@
     <ul class="trade-list">
       {% for row in outgoing %}
         <li class="trade-row">
-          <div>Your item</div>
+          <div class="trade-label">Your item</div>
+          <span class="trade-thumb">{% include "catalog/_listing_photo.html" with item=row.your_item %}</span>
           <a href="/listings/{{ row.your_item.id }}">{{ row.your_item.title }}</a>
           {% include "catalog/_status_badge.html" with item=row.your_item %}
-          <div>Their item</div>
+          <div class="trade-label">Their item</div>
+          <span class="trade-thumb">{% include "catalog/_listing_photo.html" with item=row.their_item %}</span>
           <a href="/listings/{{ row.their_item.id }}">{{ row.their_item.title }}</a>
           {% include "catalog/_status_badge.html" with item=row.their_item %}
           <div>Other party {{ row.other_name }}</div>
@@ -53,6 +59,7 @@
       {% endfor %}
     </ul>
   {% else %}
+    <img class="empty-art" alt="" src="{% static 'img/empty.svg' %}">
     <p>No outgoing proposals.</p>
   {% endif %}
 </section>
@@ -62,10 +69,12 @@
     <ul class="trade-list">
       {% for row in finished %}
         <li class="trade-row">
-          <div>Your item</div>
+          <div class="trade-label">Your item</div>
+          <span class="trade-thumb">{% include "catalog/_listing_photo.html" with item=row.your_item %}</span>
           <a href="/listings/{{ row.your_item.id }}">{{ row.your_item.title }}</a>
           {% include "catalog/_status_badge.html" with item=row.your_item %}
-          <div>Their item</div>
+          <div class="trade-label">Their item</div>
+          <span class="trade-thumb">{% include "catalog/_listing_photo.html" with item=row.their_item %}</span>
           <a href="/listings/{{ row.their_item.id }}">{{ row.their_item.title }}</a>
           {% include "catalog/_status_badge.html" with item=row.their_item %}
           <div>Other party {{ row.other_name }}</div>
@@ -76,6 +85,7 @@
       {% endfor %}
     </ul>
   {% else %}
+    <img class="empty-art" alt="" src="{% static 'img/empty.svg' %}">
     <p>No finished trades.</p>
   {% endif %}
 </section>
