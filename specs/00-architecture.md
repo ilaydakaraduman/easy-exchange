@@ -161,7 +161,7 @@ Exactly three rows in the MVP, created by `seed`. Adding a category later means 
 | `metadata` | `JSONField` (object) | Keys and values validated against `category.metadata_schema` on create and edit. |
 | `created_at` | datetime | Set on create. |
 
-Item field list above. Superseded by specs/08-enhancements.md.
+Item field list above. Superseded by specs/08-enhancements.md. Superseded by specs/08-visual-design-and-photos.md.
 
 Rules: an `Item` may be edited by its owner only while `status = AVAILABLE`; `IN_TRADE` and `TRADED` items are read-only for everyone. Items are never deleted in the MVP. `status` is changed only by the trade service.
 

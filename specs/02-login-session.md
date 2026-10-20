@@ -130,7 +130,7 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 - Multiple sessions management ("sign out everywhere")
 - Any API or token authentication; the product is server-rendered only
 - Admin site login (Django admin is available to developers but is not a product feature)
-- Brief-level exclusions: payments, shipping, chat, image upload (Superseded by specs/08-enhancements.md), sports category, Neo4j, message brokers, native mobile
+- Brief-level exclusions: payments, shipping, chat, image upload (Superseded by specs/08-enhancements.md. Superseded by specs/08-visual-design-and-photos.md), sports category, Neo4j, message brokers, native mobile
 
 ## Test cases
 

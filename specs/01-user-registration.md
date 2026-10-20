@@ -68,7 +68,7 @@ Stack per [../docs/plan.md](../docs/plan.md): Django, server-rendered templates,
 - Captcha
 - Client-side (JavaScript) validation; all validation is server-side
 - Login, logout, and session handling (separate spec; only the link/route target is reserved here)
-- Brief-level exclusions: payments, shipping, chat, image upload (Superseded by specs/08-enhancements.md), sports category, Neo4j, message brokers, native mobile
+- Brief-level exclusions: payments, shipping, chat, image upload (Superseded by specs/08-enhancements.md. Superseded by specs/08-visual-design-and-photos.md), sports category, Neo4j, message brokers, native mobile
 
 ## Test cases
 

@@ -233,6 +233,36 @@ Approved change request. One feature per task, in the order A, B, C, D. After ea
 
 ---
 
+## Phase 6 — Visual design and photos
+
+Approved change request: [08-visual-design-and-photos](../specs/08-visual-design-and-photos.md). Tasks 16–19 stay as they are. After each task: `python manage.py check`, `makemigrations`, `migrate`, and `python manage.py test`. Do not change `trades/services.py` or like, match, trade, authentication, or permission behavior. Update an existing test only where the visual spec names it under *Existing assertions this spec supersedes*.
+
+### Task 20 — Photo field and forms
+
+- **Goal:** Keep the optional `Item.photo` contract: JPEG, PNG, or WebP up to 5 MB, multipart create and edit, edit only while `AVAILABLE`, media served only when `DEBUG` is true. Make `STATIC_URL` root-relative so later illustration URLs resolve on `/listings/<id>`. No second migration.
+- **Specs:** [08-visual-design-and-photos](../specs/08-visual-design-and-photos.md) requirements 1–7. Must-have cases 1 and 3–5 and 9 stay in `catalog/tests/test_photo.py`; case 3 gains an uploaded SVG.
+- **Creates:** no new files. Updates `config/settings.py` (`STATIC_URL = "/static/"`) and the rejected-file test in `catalog/tests/test_photo.py`.
+- **Must-have tests** — visual spec cases 3, 4, 5, and 9. Case 1's alt text is updated in task 21, when the markup changes.
+- **Done when:** `python manage.py check` is clean, `makemigrations` reports no changes, `migrate` applies nothing new, and `python manage.py test` is green. `catalog/migrations/0002_item_photo.py` is unchanged.
+
+### Task 21 — Illustrations and cards
+
+- **Goal:** A listing with no photo shows an original category SVG on the browse card, the detail page, and the edit preview. Alt text is `<title> (<category name>)`. An unknown slug uses the generic illustration. Seed rows stay photo-less.
+- **Specs:** [08-visual-design-and-photos](../specs/08-visual-design-and-photos.md) requirements 8–10. Supersedes the empty placeholder div and the title-only alt in spec 08-enhancements.
+- **Creates:** `static/img/placeholders/funko.svg`, `lego.svg`, `tcg.svg`, `generic.svg`, and `catalog/templates/catalog/_listing_photo.html`. Updates `catalog/templates/catalog/browse.html`, `item_detail.html`, and `listing_edit.html`. Updates only the tests named in the visual spec: `test_jpeg_png_and_webp_are_stored_and_shown`, `test_create_without_a_file_shows_the_placeholder`, `test_seed_creates_no_photos`, and `test_card_without_a_photo_starts_with_the_placeholder`.
+- **Must-have tests** — visual spec cases 1, 2, 6, 7, 8, and 11.
+- **Done when:** `python manage.py test` is green. A seeded Funko card's first image is `/static/img/placeholders/funko.svg` with alt `<title> (Funko Pop & Figures)`. The title link is still the first anchor in the card.
+
+### Task 22 — Responsive visual design
+
+- **Goal:** Warm cream, pale teal, and mint page gradient; photos and illustrations stay 4:3 with `object-fit: cover` and a CSS background of the generic SVG; cards in a row share a height; long titles wrap; reduced motion drops the hover lift. Existing breakpoints, viewport tag, and 44px targets stay.
+- **Specs:** [08-visual-design-and-photos](../specs/08-visual-design-and-photos.md) requirements 11–15. Must-have case 10.
+- **Creates:** no new files. Updates `static/css/base.css` and adds the case 10 test to `catalog/tests/test_responsive.py`.
+- **Must-have tests** — visual spec case 10, plus the existing breakpoint test, which must still reject `url(http` and `url(https`.
+- **Done when:** `python manage.py check`, `makemigrations`, `migrate`, and `python manage.py test` are green. `trades/services.py` is untouched.
+
+---
+
 ## If time runs short
 
 Cut in this order, from plan section 7. Items 1 and 2 are already absent from this list, so they cost nothing.

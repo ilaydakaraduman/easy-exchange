@@ -157,9 +157,9 @@ class BrowseTests(TestCase):
         self.assertIn("Funko Pop & Figures", card)
         self.assertIn('<span class="badge badge-available">AVAILABLE</span>', card)
         self.assertIn("Ada", card)
-        self.assertLess(card.index(title_link), card.index("Funko Pop & Figures"))
-        self.assertLess(card.index("Funko Pop & Figures"), card.index("badge-available"))
-        self.assertLess(card.index("badge-available"), card.index("Ada"))
+        after_title = card[card.index(title_link) + len(title_link):]
+        self.assertLess(after_title.index("Funko Pop & Figures"), after_title.index("badge-available"))
+        self.assertLess(after_title.index("badge-available"), after_title.index("Ada"))
         self.assertNotIn(HIDDEN_DESCRIPTION, html)
         self.assertNotIn(HIDDEN_SERIAL, html)
         self.assertNotIn(">Edit</a>", html)

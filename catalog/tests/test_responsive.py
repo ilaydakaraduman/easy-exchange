@@ -44,7 +44,7 @@ class ResponsiveTests(TestCase):
         )
 
     def test_card_without_a_photo_starts_with_the_placeholder(self):
-        """Spec 08 case 2: a card with no photo shows the placeholder and the spec 04 order."""
+        """Visual spec case 11: a card with no photo starts with the category illustration."""
         item = Item.objects.create(
             owner=self.owner,
             category=self.categories["funko"],
@@ -61,15 +61,15 @@ class ResponsiveTests(TestCase):
         card = _cards(html)[0].strip()
         title_link = f'<a href="/listings/{item.id}">Visible Title</a>'
 
-        self.assertTrue(
-            card.startswith(
-                '<div class="listing-photo listing-photo-placeholder"></div>'
-            )
+        illustration = (
+            '<img class="listing-photo listing-photo-placeholder" '
+            'src="/static/img/placeholders/funko.svg" '
+            'alt="Visible Title (Funko Pop & Figures)">'
         )
-        self.assertNotIn("<img", card)
-        self.assertLess(card.index(title_link), card.index("Funko Pop & Figures"))
-        self.assertLess(card.index("Funko Pop & Figures"), card.index("badge-available"))
-        self.assertLess(card.index("badge-available"), card.index("Ada"))
+        self.assertTrue(card.startswith(illustration))
+        after_title = card[card.index(title_link) + len(title_link):]
+        self.assertLess(after_title.index("Funko Pop & Figures"), after_title.index("badge-available"))
+        self.assertLess(after_title.index("badge-available"), after_title.index("Ada"))
         self.assertNotIn(HIDDEN_DESCRIPTION, html)
         self.assertNotIn("HIDDEN-SERIAL-999", html)
 
@@ -89,3 +89,24 @@ class ResponsiveTests(TestCase):
         self.assertNotIn("url(http", css)
         self.assertNotIn("url(https", css)
         self.assertNotIn("<script", self.client.get("/").content.decode())
+
+    def test_illustrations_and_gradient_stay_local(self):
+        """Visual spec case 10: SVGs and the page gradient use no remote asset."""
+        css = (settings.BASE_DIR / "static" / "css" / "base.css").read_text(encoding="utf-8")
+
+        for color in ("#f6f1e6", "#e5f3f2", "#f2faf6"):
+            self.assertIn(color, css)
+        self.assertIn('url("../img/placeholders/generic.svg")', css)
+        self.assertIn("aspect-ratio: 4 / 3", css)
+        self.assertIn("object-fit: cover", css)
+        self.assertIn("prefers-reduced-motion", css)
+        self.assertNotIn("url(http", css)
+        self.assertNotIn("url(https", css)
+        placeholders = settings.BASE_DIR / "static" / "img" / "placeholders"
+        for name in ("funko.svg", "lego.svg", "tcg.svg", "generic.svg"):
+            text = (placeholders / name).read_text(encoding="utf-8")
+            self.assertIn("<svg", text)
+            self.assertNotIn("<script", text.lower())
+            self.assertNotIn("<image", text.lower())
+            stripped = text.replace("http://www.w3.org/2000/svg", "")
+            self.assertNotIn("http", stripped.lower())

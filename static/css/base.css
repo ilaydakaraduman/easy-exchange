@@ -48,7 +48,8 @@ body {
   font-size: 16px;
   line-height: 1.55;
   color: var(--ink);
-  background: var(--bg);
+  background-color: #f6f1e6;
+  background-image: linear-gradient(160deg, #f6f1e6 0%, #e5f3f2 52%, #f2faf6 100%);
   overflow-wrap: break-word;
 }
 
@@ -224,6 +225,7 @@ main {
 .listings {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
   gap: 1rem;
   list-style: none;
   margin: 0;
@@ -254,7 +256,9 @@ main {
   align-items: flex-start;
   gap: 0.35rem;
   min-width: 0;
+  height: 100%;
   padding: 1rem 1.1rem 1.05rem;
+  overflow-wrap: anywhere;
 }
 
 .listing-card > a {
@@ -282,7 +286,11 @@ main {
   max-width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
-  background: var(--neutral-bg);
+  object-position: center;
+  background-color: #e5f3f2;
+  background-image: url("../img/placeholders/generic.svg");
+  background-size: cover;
+  background-position: center;
   border-radius: calc(var(--radius) - 0.15rem);
 }
 

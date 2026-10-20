@@ -42,7 +42,7 @@ These are the only metadata keys in the MVP. Superseded by specs/08-enhancements
 MVP features, in implementation order (plan section 6):
 
 1. **Accounts** — register (`specs/01-user-registration.md`), login at `/login` and logout at `/logout` with a session cookie (`specs/02-login-session.md`). Email is unique case-insensitively; passwords are hashed. No OAuth, no email verification.
-2. **Catalog** — create and edit a listing (`Item`) with `title`, `description`, `category`, and `metadata` validated against the category's `metadata_schema`; public browse filtered by category; public listing detail. An `Item` can be edited only while its status is `AVAILABLE`. Listings are not deleted in the MVP. Text only, no image upload. Superseded by specs/08-enhancements.md.
+2. **Catalog** — create and edit a listing (`Item`) with `title`, `description`, `category`, and `metadata` validated against the category's `metadata_schema`; public browse filtered by category; public listing detail. An `Item` can be edited only while its status is `AVAILABLE`. Listings are not deleted in the MVP. Text only, no image upload. Superseded by specs/08-enhancements.md. Superseded by specs/08-visual-design-and-photos.md.
 3. **Likes and matches** — a logged-in user likes another user's `Item` (`Like`, unique per `(user, item)`, not allowed on own items). When the owner of item X has liked item Y **and** the owner of item Y has liked item X, a `Match` for the pair `(item_a, item_b)` exists. Likes are append-only: there is no unlike, so a `Match` is never removed. The Matches page lists the pairs the user can propose a trade on and is also the single place where the user's trades are shown (see 4); there is no separate "My trades" page. (`specs/05-likes-matches.md`)
 4. **Trades** — exactly one item for one item. Either matched owner proposes; the `Trade` records `item_offered`, `item_requested`, `proposer`, `counterparty`, and `status`. Proposing locks both items `AVAILABLE → IN_TRADE` atomically (double-booking prevention); accept moves them to `TRADED`; reject or cancel returns them to `AVAILABLE`. The Matches page shows the user's trades in three groups: incoming proposals (with accept / reject), outgoing proposals (with cancel), and finished trades (`ACCEPTED`, `REJECTED`, `CANCELLED`, read-only). (`specs/06-trades.md`)
 5. **Seed data** — two demo users, one listing per user per category (six `Item` rows, all `AVAILABLE`), and one pre-made reciprocal like pair so a `Match` exists on first load. (`specs/07-seed-data.md`)
@@ -97,7 +97,7 @@ Excluded from the MVP by the brief and plan. Do not build these; if a request to
 - Listing deletion; the MVP supports create and edit only
 - Unlike and match removal; likes are append-only, so a `Match` is never removed
 - A separate "My trades" page; trades are shown on the Matches page
-- Image upload (an optional image URL is Phase 5 polish only, and is cut first if time is short). Superseded by specs/08-enhancements.md.
+- Image upload (an optional image URL is Phase 5 polish only, and is cut first if time is short). Superseded by specs/08-enhancements.md. Superseded by specs/08-visual-design-and-photos.md.
 - OAuth / social login, email verification, password reset
 - Sports and nostalgia categories (Hot Wheels, sports cards) — stretch only, not seeded
 - Nearby / radius search and map view — stretch only
@@ -115,7 +115,7 @@ Names are exactly those used in `docs/plan.md` and must be used unchanged in eve
 - **User** — an account with a case-insensitively unique email, a display name, and a password hash.
 - **Category** — one of the three MVP collectible types, identified by `slug` (`funko`, `lego`, `tcg`), with a `name` and a `metadata_schema`.
 -- **`metadata_schema`** — JSON list on `Category` describing the allowed metadata fields; each entry has `key`, `label`, `type`, `required`, plus optional `min`, `max` (int fields only) and `choices` (str fields only). Range and choice rules live in the schema, so a new category needs only a new schema row. See `specs/00-architecture.md`.
-- **Item** (also "listing") — a collectible a `User` owns and offers for trade: `owner`, `category`, `title`, `description`, `status`, `metadata`, `created_at`. Superseded by specs/08-enhancements.md.
+- **Item** (also "listing") — a collectible a `User` owns and offers for trade: `owner`, `category`, `title`, `description`, `status`, `metadata`, `created_at`. Superseded by specs/08-enhancements.md. Superseded by specs/08-visual-design-and-photos.md.
 - **`metadata`** — JSON object on `Item` whose keys match the item's category `metadata_schema`.
 - **Item status** — `AVAILABLE` (can be liked and traded) | `IN_TRADE` (locked by a `PROPOSED` trade) | `TRADED` (terminal; swapped away).
 - **Like** — a logged-in `User` expressing interest in another user's `Item`; unique per `(user, item)`. Append-only: a like cannot be removed, so matches are never removed.
