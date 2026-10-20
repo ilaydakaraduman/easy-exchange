@@ -1,9 +1,37 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Easy Exchange{% endblock %}
 {% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <h1>Swap collectibles, not cash</h1>
+    <p>List what you have and trade it one for one with another collector.</p>
+    <p class="hero-actions">
+      {% if user.is_authenticated %}
+        <a href="/listings/new">New listing</a>
+      {% else %}
+        <a href="/register">Register</a>
+        <a href="/login">Sign in</a>
+      {% endif %}
+    </p>
+  </div>
+  <img class="hero-scene" src="{% static 'img/hero.svg' %}" alt="">
+  <ol class="hero-steps">
+    <li><img src="{% static 'img/steps/list.svg' %}" alt=""> List an item</li>
+    <li><img src="{% static 'img/steps/match.svg' %}" alt=""> Match with collectors</li>
+    <li><img src="{% static 'img/steps/swap.svg' %}" alt=""> Swap</li>
+  </ol>
+</section>
 <nav class="filters" aria-label="Categories">
   <a href="{% if q %}/?q={{ q|urlencode }}{% else %}/{% endif %}"{% if not active_category %} aria-current="page"{% endif %}>All</a>
   {% for category in categories %}
+    {% if category.slug == "funko" %}
+      <img class="chip-icon" alt="" src="{% static 'img/icons/figure.svg' %}">
+    {% elif category.slug == "lego" %}
+      <img class="chip-icon" alt="" src="{% static 'img/icons/brick.svg' %}">
+    {% elif category.slug == "tcg" %}
+      <img class="chip-icon" alt="" src="{% static 'img/icons/card.svg' %}">
+    {% endif %}
     <a href="/?category={{ category.slug }}{% if q %}&amp;q={{ q|urlencode }}{% endif %}"{% if active_category and active_category.slug == category.slug %} aria-current="page"{% endif %}>{{ category.name }}</a>
   {% endfor %}
 </nav>
@@ -38,6 +66,7 @@
     {% endfor %}
   </ul>
 {% else %}
+  <img class="empty-art" alt="" src="{% static 'img/empty.svg' %}">
   <p>{% if q %}No listings match your search.{% elif active_category %}No {{ active_category.name }} listings yet.{% else %}No listings yet.{% endif %}</p>
 {% endif %}
 {% endblock %}

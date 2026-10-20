@@ -56,7 +56,7 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 
 9. **Which file.** The template chooses by `item.category.slug`, compared exactly (case-sensitive) to `funko`, `lego`, or `tcg`. Any other slug, including a slug that does not exist in seed data, uses `generic.svg`. Seed is not changed. Spec 07 still forbids updating existing rows, so every current and seeded listing has a blank `photo` and therefore shows its category illustration with no data migration.
 
-10. **Markup.** One include, `catalog/templates/catalog/_listing_photo.html`, is used by the browse card, the detail page (first element inside the content block, before the `<h1>`), and the edit page (the preview above the form). It loads `static`.
+10. **Markup.** One include, `catalog/templates/catalog/_listing_photo.html`, is used by the browse card, the detail page (first element inside the content block, before the `<h1>`), and the edit page (the preview above the form). It loads `static`. Superseded by specs/09-visual-polish.md.
 
     Photo set:
 
@@ -72,7 +72,7 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 
     `<file>` is the name from requirement 8. `src` for a blank photo is the `{% static %}` URL of that file, which requirement 3 makes `/static/img/placeholders/<file>.svg`. Alt text is exactly the title, then a space, then the category `name` in parentheses. Example: `Visible Title (Funko Pop & Figures)`. Django auto-escaping applies to the title, the category name, and the URL. No `|safe`. The image is not wrapped in a link, so on a card the title `<a href="/listings/<id>">` stays the first anchor.
 
-    The browse card's `li` class stays `listing-card`. After the image, the card still shows, in this order, the title link, the category name, the status badge, and the owner `display_name`. It still omits `description`, metadata, `Edit`, and every `<form>`. The detail page's other elements, badge, `Edit` link rule, and action area are unchanged. The Matches page does not gain images.
+    The browse card's `li` class stays `listing-card`. After the image, the card still shows, in this order, the title link, the category name, the status badge, and the owner `display_name`. It still omits `description`, metadata, `Edit`, and every `<form>`. The detail page's other elements, badge, `Edit` link rule, and action area are unchanged. The Matches page does not gain images. Superseded by specs/09-visual-polish.md.
 
 11. **CSS fallback without JavaScript.** `.listing-photo` keeps a fixed box: `width: 100%`, `aspect-ratio: 4 / 3`, `object-fit: cover`, `object-position: center`, and the existing rounded corners (`border-radius`). It also sets `background-color: #e5f3f2` and `background-image: url("../img/placeholders/generic.svg")` with `background-size: cover` and `background-position: center`. That URL is relative to `static/css/base.css`. It is not `url(http...)` or `url(https...)`. A loaded photo or illustration covers this background. A broken or missing `src` still shows the generic illustration behind the image box. No script handles the error.
 
@@ -154,7 +154,7 @@ Not superseded, and left unchanged on purpose:
 - Deleting a replaced file from disk
 - An image URL field instead of upload
 - Serving media when `DEBUG` is false, cloud storage, and a production web server
-- Images on the Matches page, like controls, or trade rows
+- Images on the Matches page, like controls, or trade rows. Superseded by specs/09-visual-polish.md.
 - Changing seed rows, seed copy, or `catalog/management/commands/seed.py`
 - A second `photo` migration or any edit to an existing migration
 - Search, TCG `game` / `set_name`, or any new metadata key
@@ -212,7 +212,7 @@ All decided. Each choice is the smallest one that meets the change request.
 6. **Broken image.** Decided: CSS `background-image` of `generic.svg` on `.listing-photo`, no JavaScript (requirement 11).
 7. **`STATIC_URL`.** Decided: `"/static/"` so detail-page illustration URLs are root-relative (requirement 3).
 8. **One include.** Decided: `_listing_photo.html` on the card, the detail page, and the edit preview (requirement 10).
-9. **Matches page.** Decided: no images added.
+9. **Matches page.** Decided: no images added. Superseded by specs/09-visual-polish.md.
 10. **Image is not a link.** Decided: the title anchor stays the first `<a>` in the card (requirement 10).
 11. **Migration.** Decided: keep `0002_item_photo.py`. Do not generate another (requirement 1).
 12. **Seed.** Decided: do not change the command. A blank `photo` is how illustrations appear (requirement 9).

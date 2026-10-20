@@ -62,7 +62,7 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 ### Matches page
 
 15. Route `GET /matches`. Requires login; an anonymous visitor is redirected to `/login?next=/matches` (02-login-session requirement 19) and the page body is not rendered. `POST /matches` returns `405`.
-16. The page heading is `Matches`. It lists every `Match` in which the logged-in user owns `item_a` or `item_b`, ordered by `Match.id` ascending (architecture: "lists of likes and matches are ordered by `id`"; `Match` has no `created_at`). Each match is one row showing, in this order:
+16. The page heading is `Matches`. It lists every `Match` in which the logged-in user owns `item_a` or `item_b`, ordered by `Match.id` ascending (architecture: "lists of likes and matches are ordered by `id`"; `Match` has no `created_at`). Each match is one row showing, in this order: Superseded by specs/09-visual-polish.md.
 
     | Element | Source / rule |
     | --- | --- |
