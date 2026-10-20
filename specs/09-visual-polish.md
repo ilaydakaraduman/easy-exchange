@@ -6,7 +6,9 @@
 
 This change request makes the existing pages easier to scan: a home intro, small item pictures on match and trade rows, a two-column listing detail, category icons, empty-state drawings, and a few shared finishing touches. It does not change routes, copy that specs 04–06 already fix, or any trade, like, match, or account behavior.
 
-Stack per [00-architecture.md](00-architecture.md): Django, server-rendered templates, SQLite, no JavaScript, no CDN, no web fonts. [08-visual-design-and-photos.md](08-visual-design-and-photos.md) stays approved. Where the two disagree on the layout statements named under *Statements superseded*, this spec wins once approved. Photo storage, search, the TCG schema, the four placeholder files, and the breakpoint rules stay in force.
+Stack per [00-architecture.md](00-architecture.md): Django, server-rendered templates, SQLite, no JavaScript, no CDN, no web fonts.
+
+Superseded by specs/10-header-hero-theme.md. [08-visual-design-and-photos.md](08-visual-design-and-photos.md) stays approved. Where the two disagree on the layout statements named under *Statements superseded*, this spec wins once approved. Photo storage, search, the TCG schema, the four placeholder files, and the breakpoint rules stay in force.
 
 ## User stories
 
@@ -24,6 +26,8 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 
 1. No new route, model, field, migration, form, or view. `trades/services.py` is not edited. Like, match, trade, login, logout, and permission behavior are not edited. `Item.status` and `Trade.status` still change only in `trades/services.py`.
 2. Templates that change are only `templates/base.html`, `catalog/templates/catalog/browse.html`, `catalog/templates/catalog/item_detail.html`, `trades/templates/trades/matches.html`, `trades/templates/trades/_trade_sections.html`, and `static/css/base.css`. `catalog/templates/catalog/_listing_photo.html` is included and is not edited. Badge markup, `Edit`, like controls, propose / accept / reject / cancel forms, and the search form stay as they are.
+
+Superseded by specs/10-header-hero-theme.md.
 3. These strings stay character for character, including punctuation:
 
    | Surface | Text that must stay |
@@ -56,6 +60,8 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 ### 2 — Home intro
 
 9. `GET /` renders `<section class="hero">` as the first content, before `nav.filters`. It is not rendered on any other page. It contains, in this order: the heading `Swap collectibles, not cash` (the only `h1` in the hero), the sentence `List what you have and trade it one for one with another collector.`, an `<img>` whose `src` is `/static/img/hero.svg` and whose `alt` is empty, and an ordered list of three steps. The steps are, in order, `List an item`, `Match with collectors`, and `Swap`. Each step shows one image: `/static/img/steps/list.svg`, `/static/img/steps/match.svg`, and `/static/img/steps/swap.svg`. Step `alt` text is empty. The scene is two faceless collectors exchanging a card and a figure.
+
+Superseded by specs/10-header-hero-theme.md.
 10. The hero's action line depends on the visitor:
 
     | Visitor | Links, in this order |
@@ -64,7 +70,11 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
     | Logged in | `<a href="/listings/new">New listing</a>` only |
 
     The hero contains no `<form>`, no `href="/listings/new"` when anonymous, and no `href="/login"` or `href="/register"` when logged in. It contains no `href` to `/matches`, `/trades/`, or any propose path. The header links are unchanged, so a logged-in home page still has the header `New listing` and `Matches` links outside the hero.
+
+Superseded by specs/10-header-hero-theme.md.
 11. Below the hero, the browse body stays in the spec 08-enhancements order: `nav.filters`, then `nav.game-filters` only when the category is `tcg`, then `form.search-form`, then `ul.listings` or the empty state. Search, category, and game behavior are unchanged.
+
+Superseded by specs/10-header-hero-theme.md.
 
 ### 3 — Detail page, two columns
 
@@ -99,6 +109,8 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 
 16. `templates/base.html` ends the body with `<footer class="site-footer">Easy Exchange, class project</footer>` after `</main>`. The text is not a link. Every page that extends the base layout shows it, including `/login` and `/register`.
 17. The same template's `<head>` contains one `<link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml">` (the `{% static %}` result). It does not add a `<script>` or a second stylesheet. The viewport meta tag stays the single existing tag.
+
+Superseded by specs/10-header-hero-theme.md.
 18. Cards (`.listing-card`, `.match-row`, `.trade-row`) keep the existing hover lift (`translateY(-2px)`). `button:hover` uses the same lift. `@media (prefers-reduced-motion: reduce)` sets `transition: none` and `transform: none` on those hovers, including `button:hover`. The existing `:focus-visible` outline (`2px solid` on links, buttons, and fields) stays and is not removed.
 
 ### Artwork
@@ -122,7 +134,11 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 ## Acceptance criteria
 
 - **Given** an anonymous visitor, **when** they `GET /`, **then** the hero is the first content and contains `Swap collectibles, not cash`, `List what you have and trade it one for one with another collector.`, `/static/img/hero.svg`, the three step texts in that order, `Register` to `/register`, and `Sign in` to `/login`, and the hero contains no `<form>`, no `/listings/new`, and no `/matches` or `/trades/` href.
+
+Superseded by specs/10-header-hero-theme.md.
 - **Given** a logged-in user, **when** they `GET /`, **then** the hero contains the same heading, sentence, scene, and steps, and `New listing` to `/listings/new`, and the hero contains no `<form>`, no `href="/login"`, and no `href="/register"`.
+
+Superseded by specs/10-header-hero-theme.md.
 - **Given** `/` with the three categories, **when** the category nav renders, **then** the four link texts and hrefs are unchanged (`All` to `/`, then the three category names to `/?category=<slug>`), `figure.svg` precedes the Funko link, `brick.svg` precedes the Lego link, `card.svg` precedes the Trading Card Games link, and none of those images is inside an `<a>`.
 - **Given** a match of two photo-less items, **when** either owner opens `/matches`, **then** the row contains two `img.listing-photo` thumbnails (the category illustrations) and one `svg.swap-arrow` with `aria-hidden="true"` between the two titles, and `Your item`, `Their item`, both title links, both badges, and the other `display_name` are still present.
 - **Given** a match where only one item has a photo, **when** the row renders, **then** that side's thumbnail `src` is the photo URL and the other side's `src` is that category's placeholder.
@@ -168,6 +184,8 @@ No new model, field, or query. Thumbnails read `item.photo` and `item.category` 
 - A swap arrow on trade rows
 - Reordering detail fields, or removing `Listed on`, the description, or `Edit`
 - JavaScript, CDN assets, downloaded images, brand logos, faces, and web fonts
+
+Superseded by specs/10-header-hero-theme.md.
 - Payments, shipping, chat, OAuth, email verification, sports, Neo4j, brokers, native mobile
 - Rewriting specs 00–08 beyond the pointer line, or editing `docs/plan.md`
 
@@ -175,10 +193,16 @@ No new model, field, or query. Thumbnails read `item.photo` and `item.category` 
 
 Tests use Django's built-in runner and `django.test.TestCase` only. No pytest. One behavior per test. New docstrings start with `Spec 09 case N:`. Home, detail, favicon, footer, chips, browse empty states, and static files live in `catalog/tests/test_visual_polish.py`. Match and trade rows and the Matches empty states live in `trades/tests/test_visual_polish.py`. Image uploads use a temporary `MEDIA_ROOT`. Do not edit an existing test: this spec supersedes no current assertion.
 
+Superseded by specs/10-header-hero-theme.md.
+
 **Must-have**
 
 1. **Anonymous hero.** `GET /` contains `section.hero` before `nav.filters`, the heading, the sentence, `hero.svg`, the three step texts in order, the three step image URLs, `Register` to `/register`, and `Sign in` to `/login`. The hero HTML contains no `href="/listings/new"`.
+
+Superseded by specs/10-header-hero-theme.md.
 2. **Logged-in hero.** The same heading, sentence, scene, and steps. The hero contains `New listing` to `/listings/new` and does not contain `href="/login"` or `href="/register"`.
+
+Superseded by specs/10-header-hero-theme.md.
 3. **No form and no trade link in the hero.** For both an anonymous and a logged-in `GET /`, the hero substring contains no `<form` and no `href` containing `/matches`, `/trades/`, or `/propose`.
 4. **Chip links unchanged.** The four `nav.filters` anchors still match spec 04 (text, href, `aria-current` on `All` only at `/`). `icons/figure.svg`, `icons/brick.svg`, and `icons/card.svg` each appear in that nav, outside the anchors, before the matching category name. `nav.game-filters` on `/?category=tcg` contains no `icons/`.
 5. **Match thumbnails and arrow.** A photo-less pair renders two `img.listing-photo` elements whose `src` values are the category placeholders, and one `svg` with `class="swap-arrow"` and `aria-hidden="true"` between the two title links. `Your item`, `Their item`, both category names, both badges, and the other display name remain.

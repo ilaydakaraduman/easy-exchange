@@ -88,6 +88,8 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 
 14. **Responsive rules already in 08-enhancements stay.** Do not add a second viewport tag. The one tag remains `<meta name="viewport" content="width=device-width, initial-scale=1">`. Columns stay: `repeat(3, minmax(0, 1fr))` by default, `repeat(2, minmax(0, 1fr))` inside `@media (max-width: 960px)`, and `minmax(0, 1fr)` inside `@media (max-width: 639px)`. That is one column below 640px, two through 960px, and three above 960px. Header links and the `Logout` button keep a 44px minimum tap size at widths ≤ 960px. `.filters` and `.game-filters` stay one non-wrapping row with `overflow-x: auto`. At widths ≤ 639px, login, register, create, edit, and the search form stay a single column at `max-width: 100%`, and `.match-row`, `.trade-row`, and `.details` stay one column. The page does not require horizontal scrolling at 320px. No `<script>` is added. The stylesheet contains no `url(http` and no `url(https`.
 
+Superseded by specs/10-header-hero-theme.md.
+
 15. **Motion.** `@media (prefers-reduced-motion: reduce)` sets `transition: none` on `.listing-card` and `transform: none` on `.listing-card:hover`. Do not add a new animation.
 
 ## Acceptance criteria
@@ -159,6 +161,8 @@ Not superseded, and left unchanged on purpose:
 - A second `photo` migration or any edit to an existing migration
 - Search, TCG `game` / `set_name`, or any new metadata key
 - JavaScript, CDN assets, downloaded images, brand logos, character art, and any dependency other than Pillow
+
+Superseded by specs/10-header-hero-theme.md.
 - Changes to `trades/services.py`, likes, matches, trade routes, authentication, or `Item.status` transitions
 - Wishlist, payments, shipping, chat, OAuth, email verification, sports, Neo4j, brokers, native mobile
 - Rewriting specs 00–07 beyond the pointer phrase, or editing `docs/plan.md`

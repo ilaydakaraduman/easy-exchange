@@ -37,6 +37,7 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 5. **Filter control:** a row of plain links above the list — `All` (to `/`) followed by one link per `Category` ordered by `slug` (03-listings requirement 4), each showing the category `name` and pointing to `/?category=<slug>`. The link for the active filter is marked as current (`aria-current="page"`); no JavaScript, no `<select>`, no submit button. The category links are built from the `Category` table, not hard-coded, so a new category row appears here without code changes.
 
 Superseded by specs/09-visual-polish.md.
+Superseded by specs/10-header-hero-theme.md.
 6. **Listing card.** Each listing is rendered as one entry showing, in this order: Superseded by specs/08-visual-design-and-photos.md.
 
    | Element | Source |

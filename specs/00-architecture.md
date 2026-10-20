@@ -19,6 +19,8 @@ Reasons (from the plan):
 
 Rendering is server-side only: Django templates, plain HTML forms, no JavaScript framework, no client-side validation, no REST API.
 
+Superseded by specs/10-header-hero-theme.md.
+
 ### Django app structure
 
 Three apps, matching plan Phase 1. Each app owns its models, forms, views, URL patterns, templates, and tests.

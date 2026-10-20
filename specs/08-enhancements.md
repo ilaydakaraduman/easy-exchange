@@ -26,6 +26,8 @@ Where this spec and specs 00–07 disagree on the statements listed under *State
 
 1. `templates/base.html` includes exactly one viewport tag: `<meta name="viewport" content="width=device-width, initial-scale=1">`. If that tag is already present, do not add a second one.
 2. Styling stays in `static/css/base.css`, loaded by the existing `{% static 'css/base.css' %}` link. No new stylesheet, no `@import` of a remote URL, no `url(http...)` or `url(https...)`, no CDN font, and no `<script>` added to any template this spec touches.
+
+Superseded by specs/10-header-hero-theme.md.
 3. **Columns** for `ul.listings`, from a 320px-wide viewport up:
    - width ≤ 639px: one column
    - 640px through 960px inclusive: two columns
@@ -42,6 +44,8 @@ Where this spec and specs 00–07 disagree on the statements listed under *State
    The placeholder has no text. It is a block that fills the card width, uses `aspect-ratio: 4 / 3`, and uses the existing `--neutral-bg` token as its background. No external image.
 8. The card still shows, after the photo area and in this order, the title link, the category name, the status badge, and the owner `display_name`. It still omits `description`, metadata values, `Edit`, and every `<form>` (spec 04 requirement 6, plus the photo area).
 9. Empty-state copy stays in a `<p>` after the search form (feature B). Extend the existing empty-state CSS so that paragraph keeps its current styling when `.game-filters` or `.search-form` sits between `nav.filters` and the paragraph.
+
+Superseded by specs/10-header-hero-theme.md.
 
 ### B — Search
 
@@ -60,6 +64,8 @@ Where this spec and specs 00–07 disagree on the statements listed under *State
     ```
 
     The button text is exactly `Search`. When a category is selected, the form includes `<input type="hidden" name="category" value="<slug>">`. When a game filter is active (feature C), it also includes `<input type="hidden" name="game" value="<choice>">`. When those filters are inactive, the matching hidden input is absent. The form is `GET` and has no CSRF token.
+
+Superseded by specs/10-header-hero-theme.md.
 15. **Category links and `q`.** When the normalized `q` is empty, category-link hrefs and `aria-current` stay exactly as spec 04 requirement 5 (`All` → `/`, each category → `/?category=<slug>`). When `q` is non-blank, `All` is `/?q=<encoded>` and each category is `/?category=<slug>&q=<encoded>`. Encoding uses Django's `urlencode` filter (space as `%20`). Category links do not carry `game`.
 16. **Empty results.** When the normalized `q` is non-blank and the filtered list is empty, the page shows exactly `No listings match your search.` and does not show `No listings yet.` or `No <category name> listings yet.` When `q` is blank, those two spec 04 strings stay as they are, including a TCG game filter that matches nothing.
 17. **Escaping.** `q`, titles, and descriptions are written with Django auto-escaping. No `|safe` on them. A `q` or title containing `<script>` is escaped in the HTML and does not create a script element.
@@ -88,6 +94,8 @@ Where this spec and specs 00–07 disagree on the statements listed under *State
 19. Blank optional `game` and `set_name` are omitted from `metadata`, the same rule as blank `grading` (spec 03). A create or edit `POST` that omits them stores the same metadata as it did before this spec. An unknown `game` value on the form is a field error `Select a valid choice. <value> is not one of the available choices.` A present `set_name` is stored trimmed.
 20. Create (`/listings/new?category=tcg`) and edit render the new inputs from `metadata_schema` with no hand-written TCG fields: `game` is a `<select>` with a leading blank option plus the four choices, and is not required; `set_name` is a text input and is not required. They appear after `grading` and `card_condition`. Funko and Lego forms do not render `game` or `set_name`. The detail page already iterates the schema; it shows `Game` and `Set name` in that order after card condition, with the stored string or `—` when the key is absent (spec 04 requirement 14).
 21. **Game filter row.** When the resolved category slug is `tcg`, the browse page renders a second nav after `nav.filters` and before the search form:
+
+Superseded by specs/10-header-hero-theme.md.
 
     `<nav class="game-filters" aria-label="Games">`
 
@@ -130,6 +138,8 @@ Where this spec and specs 00–07 disagree on the statements listed under *State
 
 31. The browse body order is: category `nav.filters`, then `nav.game-filters` only when category is `tcg`, then `form.search-form`, then `ul.listings` or the empty `<p>`. Superseded by specs/09-visual-polish.md.
 
+Superseded by specs/10-header-hero-theme.md.
+
 ### What this spec does not change
 
 32. Like, match, and trade behavior, including every function in `trades/services.py` and the `Item.status` state machine.
@@ -141,6 +151,8 @@ Where this spec and specs 00–07 disagree on the statements listed under *State
 ### A — Layout and photo area
 
 - **Given** any page that extends the base layout, **when** it renders, **then** the head contains one viewport meta tag with `name="viewport"` and `content="width=device-width, initial-scale=1"`, the stylesheet href is the local `base.css` static file, and the body contains no `<script`.
+
+Superseded by specs/10-header-hero-theme.md.
 - **Given** a browse card for an item with no photo, **when** `/` renders, **then** the card's first element is the placeholder div, the title link is still the first `<a>`, and the card still shows category name, badge, and owner display name, in that order, with no description and no metadata value.
 - **Given** the stylesheet, **when** it is read, **then** it defines the one-, two-, and three-column breakpoints in requirement 3, horizontal scrolling for `.filters`, and no remote `url(http` or `url(https`.
 
@@ -238,6 +250,8 @@ Not superseded, and left unchanged on purpose:
 - A game filter on Funko or Lego, a new category, or any metadata key other than `game` and `set_name`
 - Rewriting a category schema that seed already stored
 - JavaScript, CDN assets, and any dependency other than Pillow
+
+Superseded by specs/10-header-hero-theme.md.
 - Changes to `trades/services.py`, likes, matches, trade routes, or `Item.status` transitions
 - Wishlist, payments, shipping, chat, OAuth, email verification, sports, Neo4j, brokers, native mobile
 - Admin customization for the new field
@@ -251,6 +265,8 @@ Tests use Django's test runner and `django.test.TestCase` only. No pytest. One b
 1. **Viewport.** `GET /` HTML contains exactly one `name="viewport"` meta tag with `content="width=device-width, initial-scale=1"`.
 2. **Placeholder and card order.** A card with no photo starts with `listing-photo listing-photo-placeholder`, contains no `<img`, and still orders the title link, category name, badge, and display name as spec 04 case 5. Description and metadata stay absent.
 3. **CSS contract.** `static/css/base.css` contains the three breakpoints from requirement 3, `overflow-x: auto` on the filter chips, and `min-height: 44px`. The file contains no `url(http` and no `url(https`. `GET /` contains no `<script`.
+
+Superseded by specs/10-header-hero-theme.md.
 
 **Must-have — B** (`catalog/tests/test_search.py`)
 
