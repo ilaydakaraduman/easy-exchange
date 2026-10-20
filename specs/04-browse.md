@@ -35,7 +35,7 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
    | any other value | `404` (same treatment as an unknown slug in 03-listings requirement 8; see Open question 2) |
 
 5. **Filter control:** a row of plain links above the list — `All` (to `/`) followed by one link per `Category` ordered by `slug` (03-listings requirement 4), each showing the category `name` and pointing to `/?category=<slug>`. The link for the active filter is marked as current (`aria-current="page"`); no JavaScript, no `<select>`, no submit button. The category links are built from the `Category` table, not hard-coded, so a new category row appears here without code changes.
-6. **Listing card.** Each listing is rendered as one entry showing, in this order:
+6. **Listing card.** Each listing is rendered as one entry showing, in this order: Superseded by specs/08-visual-design-and-photos.md.
 
    | Element | Source |
    | --- | --- |
@@ -53,7 +53,7 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 
 10. Route `GET /listings/<id>`. Public; never redirects. This is the redirect target after create and edit in `03-listings.md` (requirements 14 and 23).
 11. If no `Item` with that `id` exists, return `404`. There is no "listing was removed" state because items are never deleted.
-12. The page shows, in this order:
+12. The page shows, in this order: Superseded by specs/08-visual-design-and-photos.md.
 
     | Element | Source / rule |
     | --- | --- |
@@ -171,13 +171,13 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 - The Matches page — `05-likes-matches.md`
 - Edit form, edit authorization messages, and the create flow — `03-listings.md` (this spec only places the `Edit` link)
 - A "My listings" page, owner profile page, or clickable owner names (not in the plan)
-- Listing images or image URLs (Phase 5 polish, cut first), thumbnails, placeholders. Superseded by specs/08-enhancements.md.
+- Listing images or image URLs (Phase 5 polish, cut first), thumbnails, placeholders. Superseded by specs/08-enhancements.md. Superseded by specs/08-visual-design-and-photos.md.
 - Like counts, view counts, or any popularity signal on cards
 - Showing a listing's trade history
 - Nearby / radius search, map view (stretch)
 - Breadcrumbs, flash messages, and further nav polish (Phase 5)
 - Any JSON / API endpoint for listings; server-rendered HTML only
-- Brief-level exclusions: payments, shipping, chat, image upload (Superseded by specs/08-enhancements.md), OAuth, email verification, sports category, Neo4j, message brokers, native mobile
+- Brief-level exclusions: payments, shipping, chat, image upload (Superseded by specs/08-enhancements.md. Superseded by specs/08-visual-design-and-photos.md), OAuth, email verification, sports category, Neo4j, message brokers, native mobile
 
 ## Test cases
 

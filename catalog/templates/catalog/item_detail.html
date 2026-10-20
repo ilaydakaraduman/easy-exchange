@@ -2,11 +2,7 @@
 {% load catalog_extras %}
 {% block title %}{{ item.title }}{% endblock %}
 {% block content %}
-{% if item.photo %}
-  <img class="listing-photo" src="{{ item.photo.url }}" alt="{{ item.title }}">
-{% else %}
-  <div class="listing-photo listing-photo-placeholder"></div>
-{% endif %}
+{% include "catalog/_listing_photo.html" %}
 <h1>{{ item.title }}</h1>
 {% include "catalog/_status_badge.html" %}
 <p>{{ item.category.name }}</p>

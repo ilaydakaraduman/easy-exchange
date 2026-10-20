@@ -1,3 +1,4 @@
+import re
 import tempfile
 from importlib import reload
 from io import BytesIO, StringIO
@@ -102,7 +103,10 @@ class PhotoTests(TestCase):
                 for url in ("/", f"/listings/{item.id}"):
                     html = self.client.get(url).content.decode()
                     self.assertIn(
-                        f'<img class="listing-photo" src="{item.photo.url}" alt="{fmt} Funko">',
+                        (
+                            f'<img class="listing-photo" src="{item.photo.url}" '
+                            f'alt="{fmt} Funko (Funko Pop &amp; Figures)">'
+                        ),
                         html,
                     )
                 fetched = self.client.get(item.photo.url)
@@ -112,21 +116,41 @@ class PhotoTests(TestCase):
                 self.assertEqual(body, payload)
 
     def test_create_without_a_file_shows_the_placeholder(self):
-        """Spec 08 case 23: a listing with no file keeps a blank photo and the placeholder."""
+        """Visual spec case 2: a listing with no file shows the category illustration."""
         response = self.client.post("/listings/new", self._data())
 
         self.assertEqual(response.status_code, 302)
         item = Item.objects.get()
         self.assertFalse(item.photo)
+        illustration = (
+            '<img class="listing-photo listing-photo-placeholder" '
+            'src="/static/img/placeholders/funko.svg" '
+            'alt="Photo Funko (Funko Pop &amp; Figures)">'
+        )
         for url in ("/", f"/listings/{item.id}"):
             html = self.client.get(url).content.decode()
-            self.assertIn("listing-photo listing-photo-placeholder", html)
-            self.assertNotIn("<img", html)
+            self.assertIn(illustration, html)
+        card = re.search(
+            r'<li class="listing-card">(.*?)</li>',
+            self.client.get("/").content.decode(),
+            re.S,
+        ).group(1)
+        title_link = f'<a href="/listings/{item.id}">Photo Funko</a>'
+        self.assertEqual(card.index("<a "), card.index(title_link))
+        self.assertLess(card.index(illustration), card.index(title_link))
 
     def test_rejected_files_are_not_stored(self):
-        """Spec 08 case 24: a GIF, a fake PNG, and an oversize JPEG are rejected."""
+        """Spec 08 case 24: a GIF, a fake PNG, and an oversize JPEG are rejected.
+
+        Visual spec case 3: an uploaded SVG is rejected with the same format message.
+        """
         _payload, gif = _image("GIF", "card.gif")
         fake = SimpleUploadedFile("note.png", b"not an image", content_type="image/png")
+        svg = SimpleUploadedFile(
+            "card.svg",
+            b"<svg viewBox='0 0 160 120'><rect width='160' height='120'/></svg>",
+            content_type="image/svg+xml",
+        )
         jpeg_payload, _jpeg = _image("JPEG", "big.jpg")
         oversize = SimpleUploadedFile(
             "big.jpg",
@@ -136,6 +160,7 @@ class PhotoTests(TestCase):
         cases = (
             (gif, FORMAT_MESSAGE),
             (fake, FORMAT_MESSAGE),
+            (svg, FORMAT_MESSAGE),
             (oversize, SIZE_MESSAGE),
         )
         for upload, message in cases:
@@ -235,12 +260,55 @@ class PhotoTests(TestCase):
         self.assertEqual(item.metadata["box_condition"], 7)
 
     def test_seed_creates_no_photos(self):
-        """Spec 08 case 28: seed leaves every item photo blank."""
+        """Visual spec case 7: seed leaves every photo blank and shows category illustrations."""
         call_command("seed", stdout=StringIO())
 
         self.assertEqual(Item.objects.count(), 6)
         for item in Item.objects.all():
             self.assertFalse(item.photo)
+        html = self.client.get("/").content.decode()
+        for name in ("funko.svg", "lego.svg", "tcg.svg"):
+            self.assertIn(f"/static/img/placeholders/{name}", html)
+
+    def test_unknown_slug_uses_the_generic_illustration(self):
+        """Visual spec case 6: a slug other than funko, lego, or tcg uses generic.svg."""
+        other = Category.objects.create(
+            slug="other",
+            name="Other Things",
+            metadata_schema=[
+                {
+                    "key": "note",
+                    "label": "Note",
+                    "type": "str",
+                    "required": False,
+                }
+            ],
+        )
+        item = Item.objects.create(
+            owner=self.owner,
+            category=other,
+            title="Oddity",
+            description="A thing.",
+            metadata={},
+        )
+        illustration = (
+            '<img class="listing-photo listing-photo-placeholder" '
+            'src="/static/img/placeholders/generic.svg" '
+            'alt="Oddity (Other Things)">'
+        )
+        for url in ("/", f"/listings/{item.id}"):
+            html = self.client.get(url).content.decode()
+            self.assertIn(illustration, html)
+
+    def test_seeded_funko_alt_includes_the_category_name(self):
+        """Visual spec case 8: a seeded Funko illustration alt includes the category name."""
+        call_command("seed", stdout=StringIO())
+
+        html = self.client.get("/").content.decode()
+        self.assertIn(
+            'alt="Ada Funko Demo (Funko Pop &amp; Figures)"',
+            html,
+        )
 
     def test_media_route_is_registered_only_when_debug_is_true(self):
         """Spec 08 case 29: media serving is inside the DEBUG check."""

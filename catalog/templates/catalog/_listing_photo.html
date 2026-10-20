@@ -1,0 +1,12 @@
+{% load static %}
+{% if item.photo %}
+<img class="listing-photo" src="{{ item.photo.url }}" alt="{{ item.title }} ({{ item.category.name }})">
+{% elif item.category.slug == "funko" %}
+<img class="listing-photo listing-photo-placeholder" src="{% static 'img/placeholders/funko.svg' %}" alt="{{ item.title }} ({{ item.category.name }})">
+{% elif item.category.slug == "lego" %}
+<img class="listing-photo listing-photo-placeholder" src="{% static 'img/placeholders/lego.svg' %}" alt="{{ item.title }} ({{ item.category.name }})">
+{% elif item.category.slug == "tcg" %}
+<img class="listing-photo listing-photo-placeholder" src="{% static 'img/placeholders/tcg.svg' %}" alt="{{ item.title }} ({{ item.category.name }})">
+{% else %}
+<img class="listing-photo listing-photo-placeholder" src="{% static 'img/placeholders/generic.svg' %}" alt="{{ item.title }} ({{ item.category.name }})">
+{% endif %}

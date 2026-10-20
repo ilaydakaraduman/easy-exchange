@@ -29,11 +29,7 @@
   <ul class="listings">
     {% for item in items %}
       <li class="listing-card">
-        {% if item.photo %}
-          <img class="listing-photo" src="{{ item.photo.url }}" alt="{{ item.title }}">
-        {% else %}
-          <div class="listing-photo listing-photo-placeholder"></div>
-        {% endif %}
+        {% include "catalog/_listing_photo.html" %}
         <a href="/listings/{{ item.id }}">{{ item.title }}</a>
         <div>{{ item.category.name }}</div>
         {% include "catalog/_status_badge.html" %}

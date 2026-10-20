@@ -60,7 +60,7 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
    | `description` | textarea | Required after trimming |
    | one input per `metadata_schema` entry | see requirement 10 | Validated per requirement 12 |
 
-   There is no status input, no owner input, no image input (Superseded by specs/08-enhancements.md), and no wishlist input.
+   There is no status input, no owner input, no image input (Superseded by specs/08-enhancements.md. Superseded by specs/08-visual-design-and-photos.md), and no wishlist input.
 10. **Dynamic metadata inputs**, built in `catalog/forms.py` from the category's `metadata_schema` (architecture *Dynamic form*). Field name = entry `key`; label = entry `label`:
 
     | Entry `type` | Rendered as | Form-level behaviour |
@@ -153,7 +153,7 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 
 ## Data and business rules
 
-- **Models** (from [00-architecture.md](00-architecture.md); no new models or fields): `Category` (`slug`, `name`, `metadata_schema`) and `Item` (`owner`, `category`, `title`, `description`, `status`, `metadata`, `created_at`). Superseded by specs/08-enhancements.md. This spec reads `User` only as `item.owner` / `request.user`.
+- **Models** (from [00-architecture.md](00-architecture.md); no new models or fields): `Category` (`slug`, `name`, `metadata_schema`) and `Item` (`owner`, `category`, `title`, `description`, `status`, `metadata`, `created_at`). Superseded by specs/08-enhancements.md. Superseded by specs/08-visual-design-and-photos.md. This spec reads `User` only as `item.owner` / `request.user`.
 - **`title`**: trimmed; required; maximum 120 characters (decided, Open question 3; the plan sets no length). **`description`**: trimmed; required; no maximum beyond the database text type.
 - **`Item.status`** defaults to `AVAILABLE` on create and is never set by the create or edit views. The edit `POST` only *conditions* on `status = 'AVAILABLE'`; it does not write `status`.
 - **`Item.category`** is set once on create and is immutable. The edit form has no category input; any `category` value in an edit `POST` body is ignored.
@@ -190,7 +190,7 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 - Deleting a listing, archiving, or hiding it
 - Changing a listing's category or owner after creation
 - Any change to `Item.status` from these views; status moves only via `trades/services.py`
-- Image upload or image URL (optional Phase 5 polish, cut first). Superseded by specs/08-enhancements.md.
+- Image upload or image URL (optional Phase 5 polish, cut first). Superseded by specs/08-enhancements.md. Superseded by specs/08-visual-design-and-photos.md.
 - A "what I want in return" wishlist field; the plan's data model has no such field, and matching is by likes
 - Creating, editing, or deleting categories through the UI; the sports / nostalgia stretch categories
 - JavaScript-driven category switching, client-side validation, or AJAX

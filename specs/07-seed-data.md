@@ -139,7 +139,7 @@ TCG JSON above. Superseded by specs/08-enhancements.md.
 
 ## Data and business rules
 
-- **Models** (no new models or fields): `Category` (`slug`, `name`, `metadata_schema`), `User` (`email`, `display_name`, `password` hash), `Item` (`owner`, `category`, `title`, `description`, `status`, `metadata`, `created_at`) (Superseded by specs/08-enhancements.md), `Like`, `Match`. `Trade` is never written.
+- **Models** (no new models or fields): `Category` (`slug`, `name`, `metadata_schema`), `User` (`email`, `display_name`, `password` hash), `Item` (`owner`, `category`, `title`, `description`, `status`, `metadata`, `created_at`) (Superseded by specs/08-enhancements.md. Superseded by specs/08-visual-design-and-photos.md), `Like`, `Match`. `Trade` is never written.
 - **Natural keys and the no-update rule.** `Category` by `slug`. `User` by normalized `email`. `Item` by the pair `(owner, category)`: the slot is filled if that user owns any item in that category. A filled slot or an existing category or user is left byte-for-byte as stored, even when the stored values differ from the constants in this spec (seed does not repair drift and does not reset a demo trade's `IN_TRADE` / `TRADED` back to `AVAILABLE`). An empty slot is filled by an insert.
 - **Fields seed sets on insert.**
 
@@ -164,7 +164,7 @@ TCG JSON above. Superseded by specs/08-enhancements.md.
 - Inserting `Like` or `Match` except by calling `like_item`
 - Any category other than `funko`, `lego`, `tcg` (sports and nostalgia stay unseeded)
 - Registration, login, browse, listing forms, the Matches page, and propose / accept (other specs). Seed only supplies the rows those features read
-- Image upload (Superseded by specs/08-enhancements.md), wishlist text, payments, shipping, chat, OAuth, email verification, Neo4j, message brokers, native mobile
+- Image upload (Superseded by specs/08-enhancements.md. Superseded by specs/08-visual-design-and-photos.md), wishlist text, payments, shipping, chat, OAuth, email verification, Neo4j, message brokers, native mobile
 - PostgreSQL, cloud deployment, or running `migrate` itself
 
 ## Test cases
