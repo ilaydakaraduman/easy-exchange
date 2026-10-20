@@ -728,7 +728,7 @@ form[action="/register"] + p {
     overflow-x: auto;
     overscroll-behavior-x: contain;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 0.35rem;
+    padding-bottom: 0.85rem;
   }
 
   .filters a {
@@ -788,6 +788,12 @@ form[action="/register"] + p {
     grid-row: auto;
     grid-column: 1;
     margin-left: 0;
+  }
+
+  .trade-row > .badge,
+  .trade-row > .trade-status {
+    justify-self: start;
+    width: auto;
   }
 
   .listing-actions {
