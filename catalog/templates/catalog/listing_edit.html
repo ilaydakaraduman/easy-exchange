@@ -3,7 +3,12 @@
 {% block content %}
 <h1>Edit listing</h1>
 <p>{{ category_name }}</p>
-<form method="post" action="/listings/{{ item.id }}/edit" novalidate>
+{% if item.photo %}
+  <img class="listing-photo" src="{{ item.photo.url }}" alt="{{ item.title }}">
+{% else %}
+  <div class="listing-photo listing-photo-placeholder"></div>
+{% endif %}
+<form method="post" action="/listings/{{ item.id }}/edit" enctype="multipart/form-data" novalidate>
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit">Save</button>

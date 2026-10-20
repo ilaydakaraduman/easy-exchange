@@ -144,6 +144,8 @@ class ListingDetailTests(TestCase):
             [
                 ("Grading (company and score)", "\u2014"),
                 ("Card condition", "Mint"),
+                ("Game", "\u2014"),
+                ("Set name", "\u2014"),
             ],
         )
 

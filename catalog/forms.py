@@ -4,11 +4,34 @@ from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from .validators import validate_metadata, validate_metadata_schema
 
 
+class ListingPhotoField(forms.ImageField):
+    default_error_messages = {
+        "invalid_image": "Upload a JPEG, PNG, or WebP image.",
+    }
+
+    def to_python(self, data):
+        if data in self.empty_values:
+            return None
+        if getattr(data, "size", 0) > 5 * 1024 * 1024:
+            raise ValidationError(
+                "Image must be 5 MB or smaller.",
+                code="max_size",
+            )
+        return super().to_python(data)
+
+
 class ListingForm(forms.Form):
     title = forms.CharField(label="Title", max_length=120)
     description = forms.CharField(
         label="Description",
         widget=forms.Textarea,
+    )
+    photo = ListingPhotoField(
+        label="Photo",
+        required=False,
+        widget=forms.FileInput(
+            attrs={"accept": "image/jpeg,image/png,image/webp"},
+        ),
     )
 
     def __init__(self, *args, category, **kwargs):
@@ -42,6 +65,26 @@ class ListingForm(forms.Form):
         except ValidationError as exc:
             _apply_metadata_errors(self, exc)
         return cleaned_data
+
+    def clean_photo(self):
+        photo = self.cleaned_data.get("photo")
+        if not photo:
+            return photo
+        from io import BytesIO
+
+        from PIL import Image
+
+        raw = photo.read()
+        if hasattr(photo, "seek"):
+            photo.seek(0)
+        try:
+            with Image.open(BytesIO(raw)) as image:
+                image_format = image.format
+        except Exception as exc:
+            raise ValidationError("Upload a JPEG, PNG, or WebP image.") from exc
+        if image_format not in {"JPEG", "PNG", "WEBP"}:
+            raise ValidationError("Upload a JPEG, PNG, or WebP image.")
+        return photo
 
 
 def initial_from_item(item):

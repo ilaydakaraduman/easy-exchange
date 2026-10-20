@@ -14,8 +14,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from django.views.static import serve
 
 from catalog.views import browse
 
@@ -26,3 +29,15 @@ urlpatterns = [
     path("", include("catalog.urls")),
     path("", include("trades.urls")),
 ]
+
+
+def _serve_media(request, path, document_root):
+    return serve(request, path, document_root=settings.MEDIA_ROOT)
+
+
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        view=_serve_media,
+        document_root=settings.MEDIA_ROOT,
+    )
