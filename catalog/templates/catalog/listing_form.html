@@ -15,7 +15,7 @@
 </form>
 {% if form %}
   <p>{{ selected_category.name }}</p>
-  <form method="post" action="/listings/new" novalidate>
+  <form method="post" action="/listings/new" enctype="multipart/form-data" novalidate>
     {% csrf_token %}
     <input type="hidden" name="category" value="{{ selected_category.slug }}">
     {{ form.as_p }}

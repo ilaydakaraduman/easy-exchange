@@ -289,7 +289,7 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 - Any new model, field, or database constraint — including a uniqueness constraint for "one `PROPOSED` trade per item" (architecture: guaranteed by the `IN_TRADE` lock, not by a constraint)
 - `select_for_update()` / PostgreSQL row locks (documented upgrade path only)
 - Any JSON / API endpoint; server-rendered HTML only
-- Brief-level exclusions: payments, shipping, chat, image upload, OAuth, email verification, sports category, Neo4j, message brokers, native mobile
+- Brief-level exclusions: payments, shipping, chat, image upload (Superseded by specs/08-enhancements.md), OAuth, email verification, sports category, Neo4j, message brokers, native mobile
 
 ## Test cases
 

@@ -161,6 +161,7 @@ class CreateListingTests(TestCase):
                 "category",
                 "title",
                 "description",
+                "photo",
                 "box_condition",
                 "original_box_included",
                 "serial_number",
@@ -205,6 +206,7 @@ class CreateListingTests(TestCase):
                 "category",
                 "title",
                 "description",
+                "photo",
                 "sealed_misb",
                 "missing_parts",
                 "year",
@@ -239,7 +241,16 @@ class CreateListingTests(TestCase):
         form = _post_form(html)
         self.assertEqual(
             _field_names(form),
-            ["category", "title", "description", "grading", "card_condition"],
+            [
+                "category",
+                "title",
+                "description",
+                "photo",
+                "grading",
+                "card_condition",
+                "game",
+                "set_name",
+            ],
         )
         self.assertIn('<option value="tcg" selected>', html)
         kind, opening, _body = _control(form, "grading")

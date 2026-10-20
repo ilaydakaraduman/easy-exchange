@@ -1,5 +1,7 @@
+from urllib.parse import urlencode
+
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseNotAllowed
+from django.http import Http404, HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
 
 from trades.models import Like, Match
@@ -12,11 +14,28 @@ def browse(request):
     if request.method != "GET":
         return HttpResponseNotAllowed(["GET"])
 
-    categories = Category.objects.order_by("slug")
+    categories = list(Category.objects.order_by("slug"))
     raw = request.GET.get("category") if "category" in request.GET else None
     active_category = None
     if raw not in (None, "", "all"):
-        active_category = get_object_or_404(Category, slug=raw)
+        active_category = next(
+            (category for category in categories if category.slug == raw),
+            None,
+        )
+        if active_category is None:
+            raise Http404
+
+    game_choices = _tcg_game_choices(categories)
+    raw_game = request.GET.get("game") if "game" in request.GET else None
+    active_game = None
+    if raw_game not in (None, "", "all"):
+        if raw_game not in game_choices:
+            raise Http404
+        if active_category is not None and active_category.slug == "tcg":
+            active_game = raw_game
+
+    q = request.GET.get("q", "")
+    q = "" if q is None else q.strip()[:100]
 
     items = Item.objects.select_related("owner", "category").order_by(
         "-created_at",
@@ -24,6 +43,28 @@ def browse(request):
     )
     if active_category is not None:
         items = items.filter(category=active_category)
+    if active_game:
+        items = items.filter(metadata__game=active_game)
+    if q:
+        items = items.filter(Q(title__icontains=q) | Q(description__icontains=q))
+
+    game_links = []
+    if active_category is not None and active_category.slug == "tcg" and game_choices:
+        game_links.append(
+            {
+                "text": "All games",
+                "href": _game_href(q, None),
+                "current": active_game is None,
+            }
+        )
+        for choice in game_choices:
+            game_links.append(
+                {
+                    "text": choice,
+                    "href": _game_href(q, choice),
+                    "current": active_game == choice,
+                }
+            )
 
     return render(
         request,
@@ -31,9 +72,31 @@ def browse(request):
         {
             "categories": categories,
             "active_category": active_category,
+            "active_game": active_game,
+            "game_links": game_links,
             "items": items,
+            "q": q,
         },
     )
+
+
+def _tcg_game_choices(categories):
+    for category in categories:
+        if category.slug != "tcg":
+            continue
+        for entry in category.metadata_schema or []:
+            if entry.get("key") == "game":
+                return list(entry.get("choices") or [])
+    return []
+
+
+def _game_href(q, game):
+    params = {"category": "tcg"}
+    if game is not None:
+        params["game"] = game
+    if q:
+        params["q"] = q
+    return "/?" + urlencode(params)
 
 
 def listing_detail(request, item_id):
@@ -95,7 +158,7 @@ def listing_create(request):
         )
 
     category = get_object_or_404(Category, slug=request.POST.get("category", ""))
-    form = ListingForm(request.POST, category=category)
+    form = ListingForm(request.POST, request.FILES, category=category)
     if form.is_valid():
         item = Item.objects.create(
             owner=request.user,
@@ -103,6 +166,7 @@ def listing_create(request):
             title=form.cleaned_data["title"],
             description=form.cleaned_data["description"],
             metadata=form.cleaned_metadata,
+            photo=form.cleaned_data.get("photo") or "",
         )
         return redirect(f"/listings/{item.pk}")
     return render(
@@ -139,7 +203,7 @@ def listing_edit(request, item_id):
             initial=initial_from_item(item),
         )
     else:
-        form = ListingForm(request.POST, category=item.category)
+        form = ListingForm(request.POST, request.FILES, category=item.category)
         if form.is_valid():
             updated = Item.objects.filter(
                 pk=item.pk,
@@ -152,6 +216,10 @@ def listing_edit(request, item_id):
             )
             if updated == 0:
                 return _forbidden("This listing is in a trade and cannot be edited.")
+            photo = form.cleaned_data.get("photo")
+            if photo:
+                item.photo = photo
+                item.save(update_fields=["photo"])
             return redirect(f"/listings/{item.pk}")
 
     return render(

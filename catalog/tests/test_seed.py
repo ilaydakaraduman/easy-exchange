@@ -70,6 +70,24 @@ TCG_SCHEMA = [
         "required": True,
         "choices": ["Mint", "Near Mint", "Played"],
     },
+    {
+        "key": "game",
+        "label": "Game",
+        "type": "str",
+        "required": False,
+        "choices": [
+            "Pokémon",
+            "Magic: The Gathering",
+            "Yu-Gi-Oh!",
+            "Other",
+        ],
+    },
+    {
+        "key": "set_name",
+        "label": "Set name",
+        "type": "str",
+        "required": False,
+    },
 ]
 EXPECTED_SCHEMAS = {
     "funko": FUNKO_SCHEMA,

@@ -82,6 +82,13 @@ a:hover {
   color: var(--accent);
 }
 
+img,
+input,
+textarea,
+select {
+  max-width: 100%;
+}
+
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
@@ -169,8 +176,9 @@ main {
   padding: 1.75rem var(--space) 3rem;
 }
 
-/* Category filters: catalog/browse.html nav.filters */
-.filters {
+/* Category filters: catalog/browse.html nav.filters and nav.game-filters */
+.filters,
+.game-filters {
   display: flex;
   flex-wrap: nowrap;
   gap: 0.5rem;
@@ -182,7 +190,8 @@ main {
   -webkit-overflow-scrolling: touch;
 }
 
-.filters a {
+.filters a,
+.game-filters a {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -197,12 +206,14 @@ main {
   white-space: nowrap;
 }
 
-.filters a:hover {
+.filters a:hover,
+.game-filters a:hover {
   border-color: var(--accent);
   color: var(--accent-strong);
 }
 
-.filters a[aria-current="page"] {
+.filters a[aria-current="page"],
+.game-filters a[aria-current="page"] {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--on-accent);
@@ -263,6 +274,43 @@ main {
 .listing-card > div {
   color: var(--muted);
   font-size: 0.92rem;
+}
+
+.listing-photo {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--neutral-bg);
+  border-radius: calc(var(--radius) - 0.15rem);
+}
+
+.listing-card > .listing-photo {
+  align-self: stretch;
+}
+
+.search-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.5rem 0.75rem;
+  max-width: 100%;
+  margin: 0 0 1.25rem;
+}
+
+.search-form label {
+  flex: 1 1 100%;
+}
+
+.search-form input[type="text"] {
+  flex: 1 1 12rem;
+  min-width: 0;
+  width: auto;
+}
+
+.search-form button {
+  min-height: 44px;
 }
 
 /* Status badges: catalog/_status_badge.html span.badge.badge-<status> */
@@ -497,6 +545,8 @@ a[href$="/edit"]:hover {
 
 /* Empty copy: browse p after .filters, matches empty p, trade section p */
 .filters + p,
+.search-form + p,
+.game-filters + p,
 main > h1 + p:has(+ p > a[href="/"]),
 .matches_trades section > p {
   max-width: none;
@@ -711,11 +761,13 @@ form[action="/register"] + p {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  a.brand,
   nav a,
   .filters a,
+  .game-filters a,
   form[action="/logout"] button {
-    min-height: 2.75rem;
-    min-width: 2.75rem;
+    min-height: 44px;
+    min-width: 44px;
   }
 }
 
@@ -801,8 +853,19 @@ form[action="/register"] + p {
   form[action="/login"],
   form[action="/register"],
   form[action="/listings/new"]:not(.category-switch),
-  form[action$="/edit"] {
+  form[action$="/edit"],
+  .search-form {
     max-width: none;
+  }
+
+  .search-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-form input[type="text"],
+  .search-form button {
+    width: 100%;
   }
 
   .listing-actions {

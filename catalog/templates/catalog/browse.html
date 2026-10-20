@@ -2,15 +2,38 @@
 {% block title %}Easy Exchange{% endblock %}
 {% block content %}
 <nav class="filters" aria-label="Categories">
-  <a href="/"{% if not active_category %} aria-current="page"{% endif %}>All</a>
+  <a href="{% if q %}/?q={{ q|urlencode }}{% else %}/{% endif %}"{% if not active_category %} aria-current="page"{% endif %}>All</a>
   {% for category in categories %}
-    <a href="/?category={{ category.slug }}"{% if active_category and active_category.slug == category.slug %} aria-current="page"{% endif %}>{{ category.name }}</a>
+    <a href="/?category={{ category.slug }}{% if q %}&amp;q={{ q|urlencode }}{% endif %}"{% if active_category and active_category.slug == category.slug %} aria-current="page"{% endif %}>{{ category.name }}</a>
   {% endfor %}
 </nav>
+{% if game_links %}
+<nav class="game-filters" aria-label="Games">
+  {% for link in game_links %}
+    <a href="{{ link.href }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.text }}</a>
+  {% endfor %}
+</nav>
+{% endif %}
+<form class="search-form" method="get" action="/">
+  {% if active_category %}
+    <input type="hidden" name="category" value="{{ active_category.slug }}">
+  {% endif %}
+  {% if active_game %}
+    <input type="hidden" name="game" value="{{ active_game }}">
+  {% endif %}
+  <label for="id_q">Search</label>
+  <input id="id_q" type="text" name="q" maxlength="100" value="{{ q }}">
+  <button type="submit">Search</button>
+</form>
 {% if items %}
   <ul class="listings">
     {% for item in items %}
       <li class="listing-card">
+        {% if item.photo %}
+          <img class="listing-photo" src="{{ item.photo.url }}" alt="{{ item.title }}">
+        {% else %}
+          <div class="listing-photo listing-photo-placeholder"></div>
+        {% endif %}
         <a href="/listings/{{ item.id }}">{{ item.title }}</a>
         <div>{{ item.category.name }}</div>
         {% include "catalog/_status_badge.html" %}
@@ -19,6 +42,6 @@
     {% endfor %}
   </ul>
 {% else %}
-  <p>{% if active_category %}No {{ active_category.name }} listings yet.{% else %}No listings yet.{% endif %}</p>
+  <p>{% if q %}No listings match your search.{% elif active_category %}No {{ active_category.name }} listings yet.{% else %}No listings yet.{% endif %}</p>
 {% endif %}
 {% endblock %}

@@ -37,7 +37,7 @@
    | `lego` | Lego Sets & Minifigures |
    | `tcg` | Trading Card Games |
 
-7. Each row's `metadata_schema` is the list from [03-listings.md](03-listings.md) requirement 2, which is the architecture schema plus the labels and the optional `min` / `max` / `choices`. Entry order is the table order. Keys inside an entry are `key`, `label`, `type`, `required`, then `min` and `max` or `choices` when present. `required` is a JSON boolean. No other entries and no other keys (no character, line, vaulted, set number).
+7. Each row's `metadata_schema` is the list from [03-listings.md](03-listings.md) requirement 2, which is the architecture schema plus the labels and the optional `min` / `max` / `choices`. Entry order is the table order. Keys inside an entry are `key`, `label`, `type`, `required`, then `min` and `max` or `choices` when present. `required` is a JSON boolean. No other entries and no other keys (no character, line, vaulted, set number). Superseded by specs/08-enhancements.md.
 
    `funko`:
 
@@ -67,6 +67,8 @@
      {"key": "card_condition", "label": "Card condition", "type": "str", "required": true, "choices": ["Mint", "Near Mint", "Played"]}
    ]
    ```
+
+TCG JSON above. Superseded by specs/08-enhancements.md.
 
 8. For each of the three schemas, seed calls `validate_metadata_schema(schema)` from `catalog/validators.py` **before** saving that `Category`. If it raises, the command fails (requirement 4) and that row is not saved. A schema error is a developer error, not a form error (architecture *Schema configuration check*; 03-listings requirement 3).
 9. Categories are matched by `slug`. If that slug already exists, seed does not save it again and does not change `name` or `metadata_schema`. If it does not exist, seed inserts it with the `name` and the validated `metadata_schema`.
@@ -137,7 +139,7 @@
 
 ## Data and business rules
 
-- **Models** (no new models or fields): `Category` (`slug`, `name`, `metadata_schema`), `User` (`email`, `display_name`, `password` hash), `Item` (`owner`, `category`, `title`, `description`, `status`, `metadata`, `created_at`), `Like`, `Match`. `Trade` is never written.
+- **Models** (no new models or fields): `Category` (`slug`, `name`, `metadata_schema`), `User` (`email`, `display_name`, `password` hash), `Item` (`owner`, `category`, `title`, `description`, `status`, `metadata`, `created_at`) (Superseded by specs/08-enhancements.md), `Like`, `Match`. `Trade` is never written.
 - **Natural keys and the no-update rule.** `Category` by `slug`. `User` by normalized `email`. `Item` by the pair `(owner, category)`: the slot is filled if that user owns any item in that category. A filled slot or an existing category or user is left byte-for-byte as stored, even when the stored values differ from the constants in this spec (seed does not repair drift and does not reset a demo trade's `IN_TRADE` / `TRADED` back to `AVAILABLE`). An empty slot is filled by an insert.
 - **Fields seed sets on insert.**
 
@@ -162,7 +164,7 @@
 - Inserting `Like` or `Match` except by calling `like_item`
 - Any category other than `funko`, `lego`, `tcg` (sports and nostalgia stay unseeded)
 - Registration, login, browse, listing forms, the Matches page, and propose / accept (other specs). Seed only supplies the rows those features read
-- Image upload, wishlist text, payments, shipping, chat, OAuth, email verification, Neo4j, message brokers, native mobile
+- Image upload (Superseded by specs/08-enhancements.md), wishlist text, payments, shipping, chat, OAuth, email verification, Neo4j, message brokers, native mobile
 - PostgreSQL, cloud deployment, or running `migrate` itself
 
 ## Test cases

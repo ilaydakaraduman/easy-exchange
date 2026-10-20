@@ -167,7 +167,7 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 - Filtering or sorting the Matches page; pagination of matches
 - Liking from the browse page (cards have no controls, 04-browse requirement 6); likes happen on the detail page only
 - Any JSON / API endpoint; server-rendered HTML only
-- Brief-level exclusions: payments, shipping, chat, image upload, OAuth, email verification, sports category, Neo4j, message brokers, native mobile
+- Brief-level exclusions: payments, shipping, chat, image upload (Superseded by specs/08-enhancements.md), OAuth, email verification, sports category, Neo4j, message brokers, native mobile
 
 ## Test cases
 

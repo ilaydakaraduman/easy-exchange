@@ -47,7 +47,7 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
    `description` and `metadata` are **not** shown on the browse page; they belong to the detail page. No like, propose, or edit controls appear on the browse page.
 7. **Empty state.** If the filtered result is empty the page shows the text `No listings yet.` when the filter is `all`, or `No <category name> listings yet.` when a category is selected. The filter links are still rendered.
 8. **No pagination.** All matching listings are rendered on one page (decided, Open question 1).
-9. **No search.** There is no text search input, no metadata filter, no sort control, and no owner filter (brief and overview: "Search beyond filtering by category" is out of scope).
+9. **No search.** There is no text search input (Superseded by specs/08-enhancements.md), no metadata filter, no sort control, and no owner filter (brief and overview: "Search beyond filtering by category" is out of scope).
 
 ### Listing detail page
 
@@ -90,7 +90,7 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 ### What this spec does not change
 
 20. These views only read `Item`, `Category`, and `User.display_name`. They never write `Item.status` or any other field (architecture business rule: status changes go through `trades/services.py`).
-21. No new model, field, migration, or setting is introduced by this spec.
+21. No new model, field, migration, or setting is introduced by this spec. Superseded by specs/08-enhancements.md.
 
 ## Acceptance criteria
 
@@ -163,7 +163,7 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 
 ## Out of scope
 
-- Text search, searching by metadata (for example `box_condition >= 8`), owner filter, or any sort control other than the fixed newest-first order (brief / overview: "Search beyond filtering by category")
+- Text search (Superseded by specs/08-enhancements.md), searching by metadata (for example `box_condition >= 8`), owner filter, or any sort control other than the fixed newest-first order (brief / overview: "Search beyond filtering by category")
 - Pagination, infinite scroll, or a "load more" control (decided, Open question 1)
 - Hiding `IN_TRADE` or `TRADED` listings from browse, or a "show only available" toggle
 - The like control's behaviour, labels, and states — `05-likes-matches.md`
@@ -171,13 +171,13 @@ Stack per [00-architecture.md](00-architecture.md): Django, server-rendered temp
 - The Matches page — `05-likes-matches.md`
 - Edit form, edit authorization messages, and the create flow — `03-listings.md` (this spec only places the `Edit` link)
 - A "My listings" page, owner profile page, or clickable owner names (not in the plan)
-- Listing images or image URLs (Phase 5 polish, cut first), thumbnails, placeholders
+- Listing images or image URLs (Phase 5 polish, cut first), thumbnails, placeholders. Superseded by specs/08-enhancements.md.
 - Like counts, view counts, or any popularity signal on cards
 - Showing a listing's trade history
 - Nearby / radius search, map view (stretch)
 - Breadcrumbs, flash messages, and further nav polish (Phase 5)
 - Any JSON / API endpoint for listings; server-rendered HTML only
-- Brief-level exclusions: payments, shipping, chat, image upload, OAuth, email verification, sports category, Neo4j, message brokers, native mobile
+- Brief-level exclusions: payments, shipping, chat, image upload (Superseded by specs/08-enhancements.md), OAuth, email verification, sports category, Neo4j, message brokers, native mobile
 
 ## Test cases
 

@@ -35,6 +35,7 @@ class Item(models.Model):
         default=Status.AVAILABLE,
     )
     metadata = models.JSONField(default=dict)
+    photo = models.ImageField(upload_to="listings/", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -161,6 +161,8 @@ Exactly three rows in the MVP, created by `seed`. Adding a category later means 
 | `metadata` | `JSONField` (object) | Keys and values validated against `category.metadata_schema` on create and edit. |
 | `created_at` | datetime | Set on create. |
 
+Item field list above. Superseded by specs/08-enhancements.md.
+
 Rules: an `Item` may be edited by its owner only while `status = AVAILABLE`; `IN_TRADE` and `TRADED` items are read-only for everyone. Items are never deleted in the MVP. `status` is changed only by the trade service.
 
 ### `Like` (app `trades`)
@@ -213,7 +215,7 @@ Service rules (enforced in `trades/services.py`, not as database constraints): `
 
 **Deliberate extension of the plan's entry format.** `docs/plan.md` and `specs/00-overview.md` describe entries as `key`, `label`, `type`, `required`. This spec adds the optional `min`, `max`, and `choices` so that the value rules (`box_condition` 1–10, `card_condition` choices) live in the schema data and the validator stays generic with no per-category code. The metadata **keys** and their rules are unchanged; only where the rules are stored changes. See *Open questions* for the follow-up edits to the plan and overview.
 
-The MVP schemas, seeded by the `seed` command. These are the only metadata keys in the MVP; do not add character, line, vaulted, set number, or any other key.
+The MVP schemas, seeded by the `seed` command. These are the only metadata keys in the MVP; do not add character, line, vaulted, set number, or any other key. Superseded by specs/08-enhancements.md.
 
 | Category (`slug`) | Key | Type | Required | Rule | Encoded in entry as |
 | --- | --- | --- | --- | --- | --- |
@@ -225,6 +227,8 @@ The MVP schemas, seeded by the `seed` command. These are the only metadata keys 
 | `lego` | `year` | int | yes | | |
 | `tcg` | `grading` | str | no | e.g. `PSA 10` | |
 | `tcg` | `card_condition` | str | yes | `Mint` \| `Near Mint` \| `Played` | `choices: ["Mint", "Near Mint", "Played"]` |
+
+TCG schema rows above. Superseded by specs/08-enhancements.md.
 
 Labels (proposed, user-facing only): "Box condition (1–10)", "Original box included", "Serial number", "Factory sealed (MISB)", "Missing parts", "Year", "Grading (company and score)", "Card condition".
 
@@ -332,7 +336,7 @@ Consequences:
 Details, exact demo accounts, and listing contents are in `07-seed-data.md`. The architectural principle:
 
 - Seeding is a Django management command, `python manage.py seed`, run after `migrate` and idempotent enough to be re-run for the demo without creating duplicates.
-- It creates the three `Category` rows with the exact `metadata_schema` above, **two demo users** with known credentials, and **one listing per user per category** (six `Item` rows, all `AVAILABLE`, metadata using only the keys above and passing `validate_metadata`).
+- It creates the three `Category` rows with the exact `metadata_schema` above, **two demo users** with known credentials, and **one listing per user per category** (six `Item` rows, all `AVAILABLE`, metadata using only the keys above and passing `validate_metadata`). Superseded by specs/08-enhancements.md.
 - It creates **one reciprocal like pair** (user A liked one of user B's listings and user B liked one of user A's) through the same like logic as the UI, so exactly one `Match` exists on first load and can be used to propose a trade without clicking through likes.
 - No seeded trades; no sports or other stretch categories.
 

@@ -7,7 +7,7 @@ Ordered, one-session tasks for plan section 6 of [plan.md](plan.md): Phase 1 ske
 - One task per agent session. Stop when its "done when" check passes, then start the next.
 - Every task runs the full suite too: `python manage.py test` must stay green after each task.
 - Tests the specs mark as nice-to-have are not part of any task. They are listed under *If time runs short*.
-- Spec status: `00`–`07` are **Approved**.
+- Spec status: `00`–`08` are **Approved**.
 - Never commit or push unless asked.
 
 **One ordering change versus the plan.** Plan Phase 2 includes the seed command, but seed must create its reciprocal pair by calling `like_item` ([07-seed-data](../specs/07-seed-data.md) requirements 17–19). The `like_item` service (task 8) therefore comes right before seed (task 9). The like button and the Matches page stay after seed.
@@ -192,6 +192,44 @@ flowchart LR
 - **Creates:** `trades/templates/trades/_match_actions.html`, `trades/templates/trades/_trade_sections.html`, the two block bodies in `matches.html`, the trades query and three-way split in the `matches` view, `trades/tests/test_matches_trades.py`.
 - **Must-have tests** — spec 06 test cases 27–30, which close spec 05 case 36: propose button matrix (present only when both items `AVAILABLE`; with two matches, exactly one form naming the proposable match id); incoming / outgoing rendering for B and A with the right forms, labels, `Proposed by`, status text, badges, and nothing for C, with the three headings in order after the pair list; finished rendering after accept / reject / cancel with no `<form>` in the row; demo flow end to end (A proposes → `/` shows both `IN_TRADE`; B accepts → `/` shows both `TRADED`; both Matches pages show the trade under `Finished trades` as `ACCEPTED`). Cases 31–35 are nice-to-have and not scheduled.
 - **Done when:** `python manage.py test` is fully green and the output still lists `second propose on a locked item is refused`. Manual demo: `python manage.py migrate && python manage.py seed && python manage.py runserver`; sign in as Ada, open `Matches`, press `Propose trade`; open `/` and see both Funko listings badged `IN_TRADE`; sign out, sign in as Ben, open `Matches`, see the proposal under `Incoming proposals`, press `Accept`; open `/` and see both Funko listings `TRADED`; both users' Matches pages list the trade under `Finished trades` with status `ACCEPTED`, and the pair row shows no `Propose trade` button.
+
+---
+
+## Phase 5 — Enhancements (spec 08)
+
+Approved change request. One feature per task, in the order A, B, C, D. After each task: `python manage.py check`, `makemigrations`, `migrate`, and `python manage.py test`. Do not change `trades/services.py` or like, match, or trade behavior. Update an existing test only where spec 08 names it under *Existing assertions this spec supersedes*.
+
+### Task 16 — Mobile and visual polish
+
+- **Goal:** Phone layout from 320px: viewport meta, one / two / three card columns, wrapping header with 44px targets, horizontally scrolling filter chips, stacked forms and Matches rows, and a CSS photo placeholder on every browse card. No JavaScript and no CDN.
+- **Specs:** [08-enhancements](../specs/08-enhancements.md) requirements 1–9; must-have cases 1–3.
+- **Creates:** no new files. Updates `templates/base.html` (viewport tag, once), `static/css/base.css` (breakpoints, 44px targets, `.listing-photo`, `.game-filters` chip scrolling), `catalog/templates/catalog/browse.html` (placeholder div as the first child of `li.listing-card`).
+- **Must-have tests** — spec 08 cases 1–3, written in task 19's test pass (`catalog/tests/test_responsive.py`): one viewport meta; placeholder and existing card order; CSS breakpoints, `overflow-x: auto`, `min-height: 44px`, no remote `url(http`.
+- **Done when:** `python manage.py check` is clean, `makemigrations --check` reports no changes, and `python manage.py test` is green. A card with no photo shows `listing-photo listing-photo-placeholder` and still has no description or metadata.
+
+### Task 17 — Search
+
+- **Goal:** `GET /` accepts `q`, a case-insensitive substring match on title or description, combined with `category`, newest first, max 100 characters. Blank `q` does not filter. The search form keeps the selected category. Empty text is `No listings match your search.`
+- **Specs:** [08-enhancements](../specs/08-enhancements.md) requirements 10–17 and 31. Supersedes spec 04 requirement 9 for text search only.
+- **Creates:** no new files. Updates `catalog/views.py` (`browse`) and `catalog/templates/catalog/browse.html` (the `GET` form, `q` on category links only when `q` is non-blank).
+- **Must-have tests** — spec 08 cases 4–13 in `catalog/tests/test_search.py`.
+- **Done when:** `python manage.py test` is green, including spec 04's category hrefs when `q` is absent and the two-query browse assertion.
+
+### Task 18 — TCG game and set name
+
+- **Goal:** Optional `game` and `set_name` on the `tcg` schema only. The generic validator stays unchanged. Browse shows a game-filter row when `category=tcg`. Unknown `game` is 404. Seed writes the new schema on insert and does not change seed item metadata.
+- **Specs:** [08-enhancements](../specs/08-enhancements.md) requirements 18–23. Supersedes the TCG schema equality in spec 07 case 1, the TCG field list in spec 03 case 15, and the full TCG detail rows in spec 04 case 14.
+- **Creates:** no new files. Updates `catalog/schemas.py`, `catalog/views.py`, `catalog/templates/catalog/browse.html`. Updates only `catalog/tests/test_seed.py` (local `TCG_SCHEMA`), `catalog/tests/test_create_listing.py` (TCG step-2 field names, not yet `photo`), and `catalog/tests/test_detail.py` (`test_absent_grading_renders_as_an_em_dash`).
+- **Must-have tests** — spec 08 cases 14–21 in `catalog/tests/test_tcg_game.py`, plus the updated seed deep-equal.
+- **Done when:** `python manage.py test` is green. Fresh seed's `tcg` schema includes `game` and `set_name`. Funko and Lego schemas and the six item metadata objects are unchanged. A second seed still does not rewrite an existing schema.
+
+### Task 19 — Listing photo
+
+- **Goal:** Optional `Item.photo` (`ImageField`, `upload_to="listings/"`, blank, not null). Create and edit accept one JPEG, PNG, or WebP up to 5 MB. Cards and the detail page show the image or the placeholder. Edit stays `AVAILABLE`-only. Pillow, `MEDIA_URL` `/media/`, `MEDIA_ROOT` `media/`, media served only when `DEBUG` is true, `media/` gitignored. Seed creates no photos.
+- **Specs:** [08-enhancements](../specs/08-enhancements.md) requirements 24–30. Supersedes the create-form field lists by inserting `photo` after `description`.
+- **Creates:** `catalog/migrations/` for `Item.photo`, `catalog/tests/test_photo.py`, and the spec 08 test modules from tasks 16–18 if they were not added earlier. Updates `catalog/models.py`, `catalog/forms.py`, `catalog/views.py`, `catalog/templates/catalog/browse.html`, `catalog/templates/catalog/item_detail.html`, `catalog/templates/catalog/listing_form.html`, `catalog/templates/catalog/listing_edit.html`, `config/settings.py`, `config/urls.py`, `requirements.txt`, `.gitignore`, and the three step-2 field-name lists in `catalog/tests/test_create_listing.py`.
+- **Must-have tests** — spec 08 cases 22–29, and cases 1–21 from the earlier tasks.
+- **Done when:** `python manage.py check`, `makemigrations --check`, `migrate`, and `python manage.py test` are green. `trades/services.py` is untouched. No file under `media/` is committed.
 
 ---
 
