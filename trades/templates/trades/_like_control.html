@@ -1,0 +1,13 @@
+{% if user.id != item.owner_id %}
+  {% if viewer_has_liked %}
+    <span>Liked</span>
+    {% if has_match_with_viewer %}
+      <a href="/matches">See match</a>
+    {% endif %}
+  {% elif item.status == "AVAILABLE" or item.status == "IN_TRADE" %}
+    <form method="post" action="/listings/{{ item.id }}/like">
+      {% csrf_token %}
+      <button type="submit">Like</button>
+    </form>
+  {% endif %}
+{% endif %}

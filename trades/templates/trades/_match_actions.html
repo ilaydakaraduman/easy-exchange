@@ -1,0 +1,6 @@
+{% if pair.your_item.status == "AVAILABLE" and pair.their_item.status == "AVAILABLE" %}
+  <form method="post" action="/matches/{{ pair.match.id }}/propose">
+    {% csrf_token %}
+    <button type="submit">Propose trade</button>
+  </form>
+{% endif %}

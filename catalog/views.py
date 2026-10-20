@@ -1,5 +1,8 @@
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
+
+from trades.models import Like, Match
 
 from .forms import ListingForm, initial_from_item
 from .models import Category, Item
@@ -40,7 +43,23 @@ def listing_detail(request, item_id):
         Item.objects.select_related("owner", "category"),
         pk=item_id,
     )
-    return render(request, "catalog/item_detail.html", {"item": item})
+    viewer_has_liked = False
+    has_match_with_viewer = False
+    if request.user.is_authenticated:
+        viewer_has_liked = Like.objects.filter(user=request.user, item=item).exists()
+        has_match_with_viewer = Match.objects.filter(
+            Q(item_a=item, item_b__owner=request.user)
+            | Q(item_b=item, item_a__owner=request.user)
+        ).exists()
+    return render(
+        request,
+        "catalog/item_detail.html",
+        {
+            "item": item,
+            "viewer_has_liked": viewer_has_liked,
+            "has_match_with_viewer": has_match_with_viewer,
+        },
+    )
 
 
 def listing_create(request):

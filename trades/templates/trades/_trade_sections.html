@@ -1,0 +1,81 @@
+<section>
+  <h2>Incoming proposals</h2>
+  {% if incoming %}
+    <ul class="trade-list">
+      {% for row in incoming %}
+        <li class="trade-row">
+          <div>Your item</div>
+          <a href="/listings/{{ row.your_item.id }}">{{ row.your_item.title }}</a>
+          {% include "catalog/_status_badge.html" with item=row.your_item %}
+          <div>Their item</div>
+          <a href="/listings/{{ row.their_item.id }}">{{ row.their_item.title }}</a>
+          {% include "catalog/_status_badge.html" with item=row.their_item %}
+          <div>Other party {{ row.other_name }}</div>
+          <div>Proposed by {{ row.proposed_by }}</div>
+          <span class="trade-status trade-status-{{ row.trade.status|lower }}">{{ row.trade.status }}</span>
+          <div>{{ row.trade.created_at|date }}</div>
+          <form method="post" action="/trades/{{ row.trade.id }}/accept">
+            {% csrf_token %}
+            <button type="submit">Accept</button>
+          </form>
+          <form method="post" action="/trades/{{ row.trade.id }}/reject">
+            {% csrf_token %}
+            <button type="submit">Reject</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No incoming proposals.</p>
+  {% endif %}
+</section>
+<section>
+  <h2>Outgoing proposals</h2>
+  {% if outgoing %}
+    <ul class="trade-list">
+      {% for row in outgoing %}
+        <li class="trade-row">
+          <div>Your item</div>
+          <a href="/listings/{{ row.your_item.id }}">{{ row.your_item.title }}</a>
+          {% include "catalog/_status_badge.html" with item=row.your_item %}
+          <div>Their item</div>
+          <a href="/listings/{{ row.their_item.id }}">{{ row.their_item.title }}</a>
+          {% include "catalog/_status_badge.html" with item=row.their_item %}
+          <div>Other party {{ row.other_name }}</div>
+          <div>Proposed by {{ row.proposed_by }}</div>
+          <span class="trade-status trade-status-{{ row.trade.status|lower }}">{{ row.trade.status }}</span>
+          <div>{{ row.trade.created_at|date }}</div>
+          <form method="post" action="/trades/{{ row.trade.id }}/cancel">
+            {% csrf_token %}
+            <button type="submit">Cancel</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No outgoing proposals.</p>
+  {% endif %}
+</section>
+<section>
+  <h2>Finished trades</h2>
+  {% if finished %}
+    <ul class="trade-list">
+      {% for row in finished %}
+        <li class="trade-row">
+          <div>Your item</div>
+          <a href="/listings/{{ row.your_item.id }}">{{ row.your_item.title }}</a>
+          {% include "catalog/_status_badge.html" with item=row.your_item %}
+          <div>Their item</div>
+          <a href="/listings/{{ row.their_item.id }}">{{ row.their_item.title }}</a>
+          {% include "catalog/_status_badge.html" with item=row.their_item %}
+          <div>Other party {{ row.other_name }}</div>
+          <div>Proposed by {{ row.proposed_by }}</div>
+          <span class="trade-status trade-status-{{ row.trade.status|lower }}">{{ row.trade.status }}</span>
+          <div>{{ row.trade.updated_at|date }}</div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No finished trades.</p>
+  {% endif %}
+</section>

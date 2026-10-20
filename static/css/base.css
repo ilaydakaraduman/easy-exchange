@@ -51,9 +51,18 @@ main {
   margin: 0;
 }
 
-.listing-card {
+.listing-card,
+.match-row,
+.trade-row {
   padding: 0.75rem 0;
   border-bottom: 1px solid #ddd;
+}
+
+.matches,
+.trade-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .badge {
@@ -76,6 +85,10 @@ main {
 .badge-traded {
   background: #eeeeee;
   color: #444444;
+}
+
+.trade-status {
+  font-weight: 600;
 }
 
 .details dt {

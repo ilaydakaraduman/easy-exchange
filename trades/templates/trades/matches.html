@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Matches{% endblock %}
+{% block content %}
+<h1>Matches</h1>
+{% if pairs %}
+  <ul class="matches">
+    {% for pair in pairs %}
+      <li class="match-row">
+        <div>
+          <div>Your item</div>
+          <a href="/listings/{{ pair.your_item.id }}">{{ pair.your_item.title }}</a>
+          <div>{{ pair.your_item.category.name }}</div>
+          {% include "catalog/_status_badge.html" with item=pair.your_item %}
+        </div>
+        <div>
+          <div>Their item</div>
+          <a href="/listings/{{ pair.their_item.id }}">{{ pair.their_item.title }}</a>
+          <div>{{ pair.their_item.category.name }}</div>
+          {% include "catalog/_status_badge.html" with item=pair.their_item %}
+        </div>
+        <div>Other owner {{ pair.other_owner_name }}</div>
+        <div class="match_actions">
+          {% block match_actions %}
+            {% include "trades/_match_actions.html" %}
+          {% endblock %}
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No matches yet. Like other collectors' listings — when they like one of yours back, the pair appears here.</p>
+  <p><a href="/">Browse listings</a></p>
+{% endif %}
+<div class="matches_trades">
+  {% block matches_trades %}
+    {% include "trades/_trade_sections.html" %}
+  {% endblock %}
+</div>
+{% endblock %}
